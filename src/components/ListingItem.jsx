@@ -21,7 +21,6 @@ function ListingItem() {
         <div className="card-body text-center p-4 md:p-8">
           <p className="text-sm mb-3">19 Crescent drive, Rohtesay</p>
           <h2 className="card-title text-gray-900">Modern house</h2>
-          <hr className="mt-2 mb-4" />
           <div className="flex items-center justify-center flex-wrap gap-x-6 gap-y-2 font-bold text-[0.75rem] text-gray-900">
             <span className="relative pl-8 min-h-[2.5rem] leading-[2.5rem]">
               <BedroomIcon
@@ -57,7 +56,7 @@ function ListingItem() {
             </span>
           </div>
           <div className="card-actions">
-            <button className="btn btn-primary btn-block">More info</button>
+            <button className="btn btn-primary btn-block mx-0">More info</button>
           </div>
         </div>
       </div>
