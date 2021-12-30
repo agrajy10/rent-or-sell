@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { ReactComponent as GoogleIcon } from '../assets/svg/google.svg';
 function Login() {
   return (
@@ -22,6 +23,11 @@ function Login() {
             <button type="submit" className="btn btn-primary btn-block mx-0 mb-8">
               Login
             </button>
+            <p className="text-center text-sm">
+              <Link to="/forgot-password" className="text-primary hover:underline">
+                Forgot password?
+              </Link>
+            </p>
           </form>
         </div>
       </div>
