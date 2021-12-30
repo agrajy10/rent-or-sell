@@ -3,10 +3,12 @@ import { ReactComponent as GoogleIcon } from '../assets/svg/google.svg';
 
 function Signup() {
   return (
-    <main className="min-h-screen max-w-7xl mx-auto lg:py-24 md:py-20 py-14 px-3">
-      <div className="card card-bordered border-gray-200 shadow-lg max-w-md mx-auto">
+    <main className="min-h-screen max-w-7xl mx-auto lg:py-24 md:py-20 py-14 px-3 flex items-center justify-center">
+      <div className="card card-bordered border-gray-200 shadow-lg w-full max-w-md">
         <div className="card-body">
-          <h1 className="text-4xl  text-gray-900 text-center font-bold mb-8">Get started!</h1>
+          <h1 className="text-3xl md:text-4xl text-gray-900 text-center font-bold mb-8">
+            Get started!
+          </h1>
           <button
             type="button"
             className="btn btn-ghost btn-block border border-gray-300 py-3 mb-8 h-auto text-gray-800 hover:border-gray-300 hover:bg-gray-100 hover:no-underline">
