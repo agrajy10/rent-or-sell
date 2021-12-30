@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   return (
-    <header className="py-5 absolute top-0 left-0 w-full z-40 border-b border-gray-50 border-opacity-10">
+    <header className="py-5 absolute top-0 left-0 w-full z-40 ">
       <div className="max-w-7xl mx-auto px-3 flex items-center justify-start">
-        <h1 className="font-extrabold text-3xl text-white hover:opacity-90">
+        <h1 className="font-semibold text-2xl text-white lg:text-gray-900 hover:opacity-90">
           <Link to="/">Rent or Sell</Link>
         </h1>
         <Link
