@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -12,16 +12,17 @@ import FormCard from '../layout/FormCard';
 import FormContainer from '../layout/FormContainer';
 
 function Login() {
+  const navigate = useNavigate();
+
   useEffect(() => {
     document.title = 'Login | Rent or Sale';
   }, []);
 
   const onSubmit = async ({ email, password }) => {
     try {
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
-      console.log(user);
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate('/profile');
     } catch (error) {
-      console.log(error);
       toast.error('Invalid email or password');
     }
   };

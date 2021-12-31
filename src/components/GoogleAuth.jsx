@@ -1,5 +1,5 @@
 import { ReactComponent as GoogleIcon } from '../assets/svg/google.svg';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase.config';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 
 function GoogleAuth() {
   const location = useLocation();
+  const navigate = useNavigate();
   const onClick = async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -21,6 +22,7 @@ function GoogleAuth() {
           createdOn: serverTimestamp()
         });
       }
+      navigate('/profile');
     } catch (error) {
       toast.error(error.message);
     }

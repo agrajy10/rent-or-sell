@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { Formik, Form } from 'formik';
@@ -13,6 +13,8 @@ import FormHeading from '../components/FormHeading';
 import FormCard from '../layout/FormCard';
 
 function Signup() {
+  const navigate = useNavigate();
+
   useEffect(() => {
     document.title = 'Signup | Rent or Sale';
   }, []);
@@ -30,6 +32,7 @@ function Signup() {
       delete formData.password;
       formData.createdOn = serverTimestamp();
       await setDoc(doc(db, 'users', user.uid), formData);
+      navigate('/profile');
     } catch (error) {
       toast.error(error.message);
     }

@@ -5,7 +5,7 @@ function PrivateRoute() {
   const { loggedIn, checkingStatus } = useAuthStatus();
   if (checkingStatus) {
     return (
-      <div className="max-w-7xl mx-auto px-3 lg:py-24 md:py-20 py-14">
+      <div className="min-h-screen max-w-7xl mx-auto px-3 lg:py-24 md:py-20 py-14">
         <p>Loading....</p>
       </div>
     );
