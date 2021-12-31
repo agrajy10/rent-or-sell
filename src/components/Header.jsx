@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import Navbar from './Navbar';
 
 function Header() {
   const location = useLocation();
@@ -12,18 +13,7 @@ function Header() {
           }`}>
           <Link to="/">Rent or Sell</Link>
         </h1>
-        {
-          <Link
-            to="/login"
-            className={`btn btn-link mr-4 ml-auto px-7 hover:no-underline hover:opacity-60 ${
-              location.pathname === '/' ? 'text-white' : 'text-gray-900'
-            }`}>
-            Login
-          </Link>
-        }
-        <Link to="/signup" className="btn btn-primary px-7">
-          Signup
-        </Link>
+        <Navbar />
       </div>
     </header>
   );
