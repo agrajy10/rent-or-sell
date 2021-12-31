@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import TextInput from '../components/TextInput';
 import FormCard from '../layout/FormCard';
 import FormContainer from '../layout/FormContainer';
+import FormHeading from '../components/FormHeading';
 
 function ForgotPassword() {
   useEffect(() => {
