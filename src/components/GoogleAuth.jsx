@@ -1,0 +1,40 @@
+import { ReactComponent as GoogleIcon } from '../assets/svg/google.svg';
+import { useLocation } from 'react-router-dom';
+import { auth, db } from '../firebase.config';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
+
+function GoogleAuth() {
+  const location = useLocation();
+  const onClick = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const { user } = await signInWithPopup(auth, provider);
+
+      const docRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists()) {
+        await setDoc(doc(db, 'users', user.uid), {
+          name: user.displayName,
+          email: user.email,
+          createdOn: serverTimestamp()
+        });
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  return (
+    <button
+      onClick={onClick}
+      type="button"
+      className="btn btn-ghost btn-block border border-gray-300 py-3 mb-8 h-auto text-gray-800 hover:border-gray-300 hover:bg-gray-100 hover:no-underline">
+      <GoogleIcon width="24px" height="24px" className="mr-2" /> Sign{' '}
+      {location.pathname === '/login' ? 'in' : 'up'} with google
+    </button>
+  );
+}
+
+export default GoogleAuth;

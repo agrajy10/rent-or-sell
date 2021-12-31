@@ -4,4 +4,4 @@ dist
 dist-ssr
 *.local
 
-firebase.config.js
+/src/firebase.config.js
