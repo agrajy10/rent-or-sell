@@ -5,9 +5,11 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Home from './pages/Home';
 import './css/main.css';
+import PrivateRoute from './components/PrivateRoute';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -19,6 +21,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/profile" element={<PrivateRoute />}>
+            <Route path="/profile" element={<Profile />} />
+          </Route>
         </Routes>
         <Footer />
       </Router>
