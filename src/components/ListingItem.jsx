@@ -7,9 +7,12 @@ import { ReactComponent as RulerIcon } from '../assets/svg/ruler.svg';
 function ListingItem() {
   return (
     <>
-      <div className="card shadow-2xl relative">
-        <span className="bg-primary px-4 py-1 text-white text-md font-semibold absolute top-6 right-6 rounded-md">
+      <div className="card shadow-xl card-bordered border-gray-200 relative">
+        <span className="bg-primary px-4 py-1 text-white text-sm font-semibold absolute top-6 right-3 md:right-6 rounded-md">
           $4,000
+        </span>
+        <span className=" bg-violet-700 px-4 py-1 text-white text-sm font-semibold absolute top-6 left-3 md:left-6 rounded-md">
+          For Sale
         </span>
         <figure className="h-72 w-full">
           <img
