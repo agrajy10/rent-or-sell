@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .nav-link {
+        @apply btn btn-link px-2 hover:no-underline hover:opacity-60
+    }
+}
