@@ -1,6 +1,6 @@
 import { updateProfile } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -10,6 +10,10 @@ import TextInput from '../components/TextInput';
 
 function Profile() {
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    document.title = 'Profile | Rent of Sell';
+  }, []);
 
   const saveDetails = async ({ fullname }) => {
     try {
