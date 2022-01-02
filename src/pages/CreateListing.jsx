@@ -1,12 +1,16 @@
+import { useState } from 'react';
 import axios from 'axios';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { v4 as uuidv4 } from 'uuid';
 import TextInput from '../components/TextInput';
 import TextAreaInput from '../components/TextAreaInput';
 import ToggleInput from '../components/ToggleInput';
 import RadioInput from '../components/RadioInput';
-import { auth, db } from '../firebase.config';
+import FileInput from '../components/FileInput';
+import { auth, db, storage } from '../firebase.config';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { toast } from 'react-toastify';
 
 const initialValues = {
@@ -23,7 +27,8 @@ const initialValues = {
   listingSize: 0,
   regularPrice: 0,
   discountPrice: 0,
-  onOffer: false
+  onOffer: false,
+  images: null
 };
 
 const validationSchema = Yup.object({
@@ -52,10 +57,12 @@ const validationSchema = Yup.object({
       .lessThan(Yup.ref('regularPrice'), 'Discount must be less than regular price')
       .positive('Enter a valid price')
       .required('Required')
-  })
+  }),
+  images: Yup.mixed().required('You must upload atleast one image')
 });
 
 function CreateListing() {
+  const [imageThumbs, setImageThumbs] = useState([]);
   const getCoordinates = async (address) => {
     try {
       const { data } = await axios({
@@ -72,6 +79,39 @@ function CreateListing() {
     } catch (error) {
       return [null, error.message];
     }
+  };
+
+  const storeImage = async (image) => {
+    return new Promise((resolve, reject) => {
+      const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+      const storageRef = ref(storage, 'images/' + fileName);
+
+      const uploadTask = uploadBytesResumable(storageRef, image);
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        },
+        (error) => {
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
   };
 
   const onSubmit = async (values) => {
@@ -93,11 +133,20 @@ function CreateListing() {
           longitude: formData.longitude
         };
       }
+
+      const imgUrls = await Promise.all(
+        [...formData.images].map((image) => storeImage(image))
+      ).catch((error) => {
+        toast.error(error.message);
+        return;
+      });
+
       delete formData.latitude;
       delete formData.longitude;
       delete formData.geolocationEnabled;
+      delete formData.images;
 
-      await addDoc(collection(db, 'listings'), formData);
+      await addDoc(collection(db, 'listings'), { ...formData, imgUrls });
       toast.success('Listing created successfully');
     } catch (error) {
       toast.error(error.message);
@@ -113,7 +162,7 @@ function CreateListing() {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={onSubmit}>
-            {({ isSubmitting, values, resetForm }) => {
+            {({ isSubmitting, values, resetForm, setFieldValue }) => {
               return (
                 <Form className="space-y-4">
                   <div>
@@ -225,6 +274,17 @@ function CreateListing() {
                       />
                     </div>
                   )}
+                  <div>
+                    <FileInput
+                      maxFiles={7}
+                      accept="image/jpg, image/png, image/jpeg"
+                      onDrop={(acceptedFiles) => setFieldValue('images', acceptedFiles)}
+                      dropZoneText="Select images (Maximum 7)"
+                      id="images"
+                      name="images"
+                      label="Upload listing images (.jpg, .png)"
+                    />
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <button
                       type="button"

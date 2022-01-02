@@ -7,3 +7,9 @@
         @apply btn btn-link px-2 hover:no-underline hover:opacity-60
     }
 }
+
+@layer components {
+    .dropzone {
+        @apply bg-white text-gray-400 text-sm border-2 border-dashed border-gray-300 rounded-md text-center h-32 flex items-center justify-center cursor-pointer hover:border-gray-400
+    }
+}
