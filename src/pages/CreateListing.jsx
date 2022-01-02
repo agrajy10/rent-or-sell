@@ -153,6 +153,12 @@ function CreateListing() {
     }
   };
 
+  const deleteImage = (path, setFieldValue) => {
+    const newImageThumbs = imageThumbs.filter((image) => image.path !== path);
+    setImageThumbs(newImageThumbs);
+    setFieldValue('images', newImageThumbs);
+  };
+
   return (
     <main className="min-h-screen max-w-7xl px-3 mx-auto">
       <section className="lg:py-24 md:py-20 py-14">
@@ -278,12 +284,52 @@ function CreateListing() {
                     <FileInput
                       maxFiles={7}
                       accept="image/jpg, image/png, image/jpeg"
-                      onDrop={(acceptedFiles) => setFieldValue('images', acceptedFiles)}
+                      onDrop={(acceptedFiles) => {
+                        setImageThumbs(
+                          acceptedFiles.map((file) =>
+                            Object.assign(file, {
+                              preview: URL.createObjectURL(file)
+                            })
+                          )
+                        );
+                        setFieldValue('images', acceptedFiles);
+                      }}
                       dropZoneText="Select images (Maximum 7)"
                       id="images"
                       name="images"
                       label="Upload listing images (.jpg, .png)"
                     />
+                    {!!imageThumbs.length && (
+                      <ul className="flex items-center justify-start flex-wrap gap-4 mt-4">
+                        {imageThumbs.map((file) => (
+                          <li key={uuidv4()} className="flex-shrink-0 relative">
+                            <img
+                              className="w-24 h-24 border border-gray-200 rounded"
+                              src={file.preview}
+                            />
+                            <button
+                              onClick={() => deleteImage(file.path, setFieldValue)}
+                              type="button"
+                              aria-label="Delete image"
+                              className="absolute -top-2 -right-2 w-5 h-5 inline-flex items-center justify-center text-white text-[10px] bg-red-400 hover:bg-red-500 rounded-full">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-3 w-3"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <button
