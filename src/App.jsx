@@ -13,7 +13,7 @@ import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
 import Profile from './pages/Profile';
 import CreateListing from './pages/create-listing/CreateListing';
-import ListingDetails from './pages/ListingDetails';
+import ListingDetails from './pages/listing-details/ListingDetails';
 
 function App() {
   return (
