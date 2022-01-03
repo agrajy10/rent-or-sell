@@ -13,6 +13,7 @@ import { db } from '../../firebase.config';
 function ListingDetails() {
   const [listing, setListing] = useState({});
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const { listingId } = useParams();
 
@@ -23,9 +24,11 @@ function ListingDetails() {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setListing(docSnap.data());
+        } else {
+          throw new Error('Listing does not exist');
         }
       } catch (error) {
-        toast.error(error.message);
+        setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -40,6 +43,14 @@ function ListingDetails() {
     return (
       <div className="min-h-screen max-w-7xl mx-auto px-3 lg:py-24 md:py-20 py-14">
         <p>Loading....</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen max-w-7xl mx-auto px-3 lg:py-24 md:py-20 py-14 text-center">
+        <p>Listing does not exist.</p>
       </div>
     );
   }
