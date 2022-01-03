@@ -4,12 +4,14 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { toast } from 'react-toastify';
+
 import TextInput from '../components/TextInput';
 import GoogleAuth from '../components/GoogleAuth';
-import { auth } from '../firebase.config';
 import FormHeading from '../components/FormHeading';
 import FormCard from '../layout/FormCard';
 import FormContainer from '../layout/FormContainer';
+
+import { auth } from '../firebase.config';
 
 function Login() {
   const navigate = useNavigate();

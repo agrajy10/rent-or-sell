@@ -4,13 +4,15 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { auth, db } from '../firebase.config';
 import { toast } from 'react-toastify';
+
 import TextInput from '../components/TextInput';
 import GoogleAuth from '../components/GoogleAuth';
 import FormContainer from '../layout/FormContainer';
 import FormHeading from '../components/FormHeading';
 import FormCard from '../layout/FormCard';
+
+import { auth, db } from '../firebase.config';
 
 function Signup() {
   const navigate = useNavigate();

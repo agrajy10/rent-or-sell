@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useAuthStatus from '../hooks/useAuthStatus';
+
 import { auth } from '../firebase.config';
 
 function Navbar() {

@@ -1,13 +1,15 @@
 import { useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { auth } from '../firebase.config';
-import { sendPasswordResetEmail } from 'firebase/auth';
 import { toast } from 'react-toastify';
+import { sendPasswordResetEmail } from 'firebase/auth';
+
 import TextInput from '../components/TextInput';
 import FormCard from '../layout/FormCard';
 import FormContainer from '../layout/FormContainer';
 import FormHeading from '../components/FormHeading';
+
+import { auth } from '../firebase.config';
 
 function ForgotPassword() {
   useEffect(() => {

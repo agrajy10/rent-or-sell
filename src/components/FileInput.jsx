@@ -1,6 +1,7 @@
 import { useDropzone } from 'react-dropzone';
 import { useField } from 'formik';
-function FileInput({ label, dropZoneText, ...props }) {
+
+function FileInput({ dropZoneText, label, ...props }) {
   const { getRootProps, getInputProps } = useDropzone(props);
   const [_, meta] = useField(props);
   return (

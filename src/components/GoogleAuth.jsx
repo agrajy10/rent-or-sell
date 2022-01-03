@@ -1,9 +1,12 @@
-import { ReactComponent as GoogleIcon } from '../assets/svg/google.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { auth, db } from '../firebase.config';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
+
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+
+import { auth, db } from '../firebase.config';
+
+import { ReactComponent as GoogleIcon } from '../assets/svg/google.svg';
 
 function GoogleAuth() {
   const location = useLocation();

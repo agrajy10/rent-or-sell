@@ -1,12 +1,14 @@
+import { useEffect, useState } from 'react';
 import { updateProfile } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { auth, db } from '../firebase.config';
+
 import FormCard from '../layout/FormCard';
 import TextInput from '../components/TextInput';
+
+import { auth, db } from '../firebase.config';
 
 function Profile() {
   const [isEditing, setIsEditing] = useState(false);
