@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import { auth, db, storage } from '../../firebase.config';
+import { toast } from 'react-toastify';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { toast } from 'react-toastify';
+
+import { auth, db, storage } from '../../firebase.config';
 
 export const getCoordinates = async (address) => {
   try {
