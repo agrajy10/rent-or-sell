@@ -14,6 +14,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import Profile from './pages/Profile';
 import CreateListing from './pages/create-listing/CreateListing';
 import ListingDetails from './pages/listing-details/ListingDetails';
+import MyListings from './pages/MyListings';
 
 function App() {
   return (
@@ -32,6 +33,9 @@ function App() {
             <Route path="/create-listing" element={<CreateListing />} />
           </Route>
           <Route path="/listing/:listingId" element={<ListingDetails />} />
+          <Route path="/my-listings" element={<PrivateRoute />}>
+            <Route path="/my-listings" element={<MyListings />} />
+          </Route>
         </Routes>
         <Footer />
       </Router>

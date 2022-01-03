@@ -31,6 +31,11 @@ function Navbar() {
               </Link>
             </li>
             <li>
+              <Link to="/my-listings" className={navLinkClass}>
+                My listings
+              </Link>
+            </li>
+            <li>
               <button onClick={logOut} type="button" className={navLinkClass}>
                 Logout
               </button>
