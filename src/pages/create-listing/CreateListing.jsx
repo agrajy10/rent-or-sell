@@ -1,162 +1,31 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
-import TextInput from '../components/TextInput';
-import TextAreaInput from '../components/TextAreaInput';
-import ToggleInput from '../components/ToggleInput';
-import RadioInput from '../components/RadioInput';
-import FileInput from '../components/FileInput';
-import { auth, db, storage } from '../firebase.config';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { toast } from 'react-toastify';
 
-const initialValues = {
-  type: 'sale',
-  title: '',
-  description: '',
-  address: '',
-  geolocationEnabled: false,
-  latitude: 0,
-  longitude: 0,
-  bedrooms: 1,
-  bathrooms: 1,
-  carspace: 1,
-  listingSize: 0,
-  regularPrice: 0,
-  discountPrice: 0,
-  onOffer: false,
-  images: null
-};
+import TextInput from '../../components/TextInput';
+import TextAreaInput from '../../components/TextAreaInput';
+import ToggleInput from '../../components/ToggleInput';
+import RadioInput from '../../components/RadioInput';
+import FileInput from '../../components/FileInput';
 
-const validationSchema = Yup.object({
-  type: Yup.string().required('Required'),
-  title: Yup.string().required('Required'),
-  description: Yup.string(),
-  address: Yup.string().required('Required'),
-  bedrooms: Yup.number().min(1, 'Cannot be less than one').required('Required'),
-  geolocationEnabled: Yup.boolean(),
-  latitude: Yup.number().when('geolocationEnabled', {
-    is: true,
-    then: Yup.number().integer('Invalid value').required('Required')
-  }),
-  longitude: Yup.number().when('geolocationEnabled', {
-    is: true,
-    then: Yup.number().integer('Invalid value').required('Required')
-  }),
-  bathrooms: Yup.number().min(1, 'Cannot be less than one').required('Required'),
-  carspace: Yup.number().min(0, 'Cannot be less than zero').required('Required'),
-  listingSize: Yup.number().positive('Invalid value').required('Required'),
-  regularPrice: Yup.number().positive('Enter a valid price').required('Required'),
-  onOffer: Yup.boolean(),
-  discountPrice: Yup.number().when('onOffer', {
-    is: true,
-    then: Yup.number()
-      .lessThan(Yup.ref('regularPrice'), 'Discount must be less than regular price')
-      .positive('Enter a valid price')
-      .required('Required')
-  }),
-  images: Yup.mixed().required('You must upload atleast one image')
-});
+import validationSchema from './validationSchema';
+import initialValues from './initalValues';
+import { submitListingData, deleteSelectedImage } from './createListingFunctions';
+
+import { ReactComponent as DeleteIcon } from '../../assets/svg/delete.svg';
 
 function CreateListing() {
   const [imageThumbs, setImageThumbs] = useState([]);
-  const getCoordinates = async (address) => {
-    try {
-      const { data } = await axios({
-        method: 'get',
-        url: 'https://us1.locationiq.com/v1/search.php',
-        params: {
-          key: import.meta.env.VITE_GEOCODING_API_KEY,
-          q: address,
-          format: 'json'
-        }
-      });
 
-      return [data, null];
-    } catch (error) {
-      return [null, error.message];
-    }
-  };
-
-  const storeImage = async (image) => {
-    return new Promise((resolve, reject) => {
-      const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
-      const storageRef = ref(storage, 'images/' + fileName);
-
-      const uploadTask = uploadBytesResumable(storageRef, image);
-
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
-          switch (snapshot.state) {
-            case 'paused':
-              console.log('Upload is paused');
-              break;
-            case 'running':
-              console.log('Upload is running');
-              break;
-          }
-        },
-        (error) => {
-          reject(error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            resolve(downloadURL);
-          });
-        }
-      );
-    });
-  };
-
-  const onSubmit = async (values) => {
-    try {
-      const formData = { ...values, userRef: auth.currentUser.uid, postedOn: serverTimestamp() };
-
-      if (!formData.geolocationEnabled) {
-        const [data, error] = await getCoordinates(formData.address);
-        if (error) {
-          throw new Error(error);
-        }
-        formData.geolocation = {
-          latitude: data[0].lat,
-          longitude: data[0].lon
-        };
-      } else {
-        formData.geolocation = {
-          latitude: formData.latitude,
-          longitude: formData.longitude
-        };
-      }
-
-      const imgUrls = await Promise.all(
-        [...formData.images].map((image) => storeImage(image))
-      ).catch((error) => {
-        toast.error(error.message);
-        return;
-      });
-
-      delete formData.latitude;
-      delete formData.longitude;
-      delete formData.geolocationEnabled;
-      delete formData.images;
-
-      await addDoc(collection(db, 'listings'), { ...formData, imgUrls });
-      toast.success('Listing created successfully');
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  const deleteImage = (path, setFieldValue) => {
-    const newImageThumbs = imageThumbs.filter((image) => image.path !== path);
-    setImageThumbs(newImageThumbs);
-    setFieldValue('images', newImageThumbs);
+  const onDropHanlder = (acceptedFiles, setFieldValue) => {
+    setImageThumbs(
+      acceptedFiles.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file)
+        })
+      )
+    );
+    setFieldValue('images', acceptedFiles);
   };
 
   return (
@@ -167,7 +36,7 @@ function CreateListing() {
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={onSubmit}>
+            onSubmit={submitListingData}>
             {({ isSubmitting, values, resetForm, setFieldValue }) => {
               return (
                 <Form className="space-y-4">
@@ -284,16 +153,7 @@ function CreateListing() {
                     <FileInput
                       maxFiles={7}
                       accept="image/jpg, image/png, image/jpeg"
-                      onDrop={(acceptedFiles) => {
-                        setImageThumbs(
-                          acceptedFiles.map((file) =>
-                            Object.assign(file, {
-                              preview: URL.createObjectURL(file)
-                            })
-                          )
-                        );
-                        setFieldValue('images', acceptedFiles);
-                      }}
+                      onDrop={(acceptedFiles) => onDropHanlder(acceptedFiles, setFieldValue)}
                       dropZoneText="Select images (Maximum 7)"
                       id="images"
                       name="images"
@@ -308,23 +168,18 @@ function CreateListing() {
                               src={file.preview}
                             />
                             <button
-                              onClick={() => deleteImage(file.path, setFieldValue)}
+                              onClick={() =>
+                                deleteSelectedImage(
+                                  imageThumbs,
+                                  file.path,
+                                  setFieldValue,
+                                  setImageThumbs
+                                )
+                              }
                               type="button"
                               aria-label="Delete image"
-                              className="absolute -top-2 -right-2 w-5 h-5 inline-flex items-center justify-center text-white text-[10px] bg-red-400 hover:bg-red-500 rounded-full">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-3 w-3"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M6 18L18 6M6 6l12 12"
-                                />
-                              </svg>
+                              className="delete-btn">
+                              <DeleteIcon className="h-3 w-3" />
                             </button>
                           </li>
                         ))}

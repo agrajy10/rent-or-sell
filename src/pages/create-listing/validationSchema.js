@@ -1,0 +1,33 @@
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object({
+  type: Yup.string().required('Required'),
+  title: Yup.string().required('Required'),
+  description: Yup.string(),
+  address: Yup.string().required('Required'),
+  bedrooms: Yup.number().min(1, 'Cannot be less than one').required('Required'),
+  geolocationEnabled: Yup.boolean(),
+  latitude: Yup.number().when('geolocationEnabled', {
+    is: true,
+    then: Yup.number().integer('Invalid value').required('Required')
+  }),
+  longitude: Yup.number().when('geolocationEnabled', {
+    is: true,
+    then: Yup.number().integer('Invalid value').required('Required')
+  }),
+  bathrooms: Yup.number().min(1, 'Cannot be less than one').required('Required'),
+  carspace: Yup.number().min(0, 'Cannot be less than zero').required('Required'),
+  listingSize: Yup.number().positive('Invalid value').required('Required'),
+  regularPrice: Yup.number().positive('Enter a valid price').required('Required'),
+  onOffer: Yup.boolean(),
+  discountPrice: Yup.number().when('onOffer', {
+    is: true,
+    then: Yup.number()
+      .lessThan(Yup.ref('regularPrice'), 'Discount must be less than regular price')
+      .positive('Enter a valid price')
+      .required('Required')
+  }),
+  images: Yup.mixed().required('You must upload atleast one image')
+});
+
+export default validationSchema;

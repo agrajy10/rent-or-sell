@@ -10,7 +10,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
 import Profile from './pages/Profile';
-import CreateListing from './pages/CreateListing';
+import CreateListing from './pages/create-listing/CreateListing';
 
 function App() {
   return (

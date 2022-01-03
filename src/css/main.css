@@ -6,10 +6,12 @@
     .nav-link {
         @apply btn btn-link px-2 hover:no-underline hover:opacity-60
     }
-}
-
-@layer components {
+    
     .dropzone {
         @apply bg-white text-gray-400 text-sm border-2 border-dashed border-gray-300 rounded-md text-center h-32 flex items-center justify-center cursor-pointer hover:border-gray-400
+    }
+
+    .delete-btn {
+        @apply absolute -top-2 -right-2 w-5 h-5 inline-flex items-center justify-center text-white text-[10px] bg-red-400 hover:bg-red-500 rounded-full
     }
 }
