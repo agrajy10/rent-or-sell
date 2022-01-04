@@ -39,4 +39,16 @@
         @apply bg-primary
     }
 
+    .listing-type {
+        @apply px-4 py-1 text-sm font-semibold rounded-md text-white
+    }
+
+    .listing-type.sale {
+        @apply bg-blue-600
+    }
+
+    .listing-type.rent {
+        @apply bg-purple-700
+    }
+
 }

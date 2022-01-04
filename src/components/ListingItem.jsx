@@ -1,69 +1,87 @@
-import listingFeaturedImage from '../assets/images/hero-section-bg.jpg';
+import { formatPrice } from '../utils/utils';
+
 import { ReactComponent as BedroomIcon } from '../assets/svg/bed.svg';
 import { ReactComponent as BathroomIcon } from '../assets/svg/bathtub.svg';
 import { ReactComponent as CarIcon } from '../assets/svg/car.svg';
 import { ReactComponent as RulerIcon } from '../assets/svg/ruler.svg';
+import { Link } from 'react-router-dom';
 
-function ListingItem() {
+function ListingItem({
+  address,
+  bathrooms,
+  bedrooms,
+  carspace,
+  discountPrice,
+  docID,
+  imgUrls,
+  listingSize,
+  onOffer,
+  regularPrice,
+  title,
+  type
+}) {
+  const listingType = type === 'sale' ? 'For Sale' : 'For Rent';
+  const listingPrice = onOffer ? discountPrice : regularPrice;
+  const listingOfferTag = onOffer ? (
+    <span className="listing-type bg-rose-500">On offer</span>
+  ) : (
+    <span className={`listing-type ${type}`}>{listingType}</span>
+  );
+  const listingPriceText = `${formatPrice(listingPrice)} ${type === 'rent' ? ' / month' : ''}`;
+
   return (
-    <>
-      <div className="card shadow-xl card-bordered border-gray-200 relative">
-        <span className="bg-primary px-4 py-1 text-white text-sm font-semibold absolute top-6 right-3 md:right-6 rounded-md">
-          $4,000
-        </span>
-        <span className=" bg-violet-700 px-4 py-1 text-white text-sm font-semibold absolute top-6 left-3 md:left-6 rounded-md">
-          For Sale
-        </span>
-        <figure className="h-72 w-full">
-          <img
-            src={listingFeaturedImage}
-            alt="Listing title"
-            className="w-full h-full object-cover"
-          />
-        </figure>
-        <div className="card-body text-center p-4 md:p-8">
-          <p className="text-sm mb-3">19 Crescent drive, Rohtesay</p>
-          <h2 className="card-title text-gray-900">Modern house</h2>
-          <div className="flex items-center justify-center flex-wrap gap-x-6 gap-y-2 font-bold text-[0.75rem] text-gray-900">
-            <span className="relative pl-8 min-h-[2.5rem] leading-[2.5rem]">
-              <BedroomIcon
-                width="26px"
-                height="26px"
-                className="absolute top-1/2 left-0 -translate-y-1/2"
-              />
-              2
-            </span>
-            <span className="relative pl-8 min-h-[2.5rem] leading-[2.5rem]">
-              <BathroomIcon
-                width="26px"
-                height="26px"
-                className="absolute top-1/2 left-0 -translate-y-1/2"
-              />
-              2
-            </span>
-            <span className="relative pl-8 min-h-[2.5rem] leading-[2.5rem]">
-              <CarIcon
-                width="26px"
-                height="26px"
-                className="absolute top-1/2 left-0 -translate-y-1/2"
-              />
-              2
-            </span>
-            <span className="relative pl-8 min-h-[2.5rem] leading-[2.5rem]">
-              <RulerIcon
-                width="26px"
-                height="26px"
-                className="absolute top-1/2 left-0 -translate-y-1/2"
-              />
-              2,400 SQFT
-            </span>
-          </div>
-          <div className="card-actions">
-            <button className="btn btn-primary btn-block mx-0">More info</button>
-          </div>
+    <article className="card shadow-xl card-bordered border-gray-200 relative">
+      <div className="absolute flex items-center top-0 left-0 w-full p-4 gap-2">
+        {listingOfferTag}
+        <span className="listing-type bg-primary ml-auto">{listingPriceText}</span>
+      </div>
+      <figure className="h-72 w-full">
+        <img src={imgUrls[0]} alt={title} className="w-full h-full object-cover" />
+      </figure>
+      <div className="card-body text-center p-4 md:p-8">
+        <p className="text-sm mb-3">{address}</p>
+        <h2 className="card-title text-gray-900">{title}</h2>
+        <div className="flex items-center justify-center flex-wrap gap-x-6 gap-y-2 font-bold text-[0.75rem] text-gray-900">
+          <span className="relative pl-8 min-h-[2.5rem] leading-[2.5rem]">
+            <BedroomIcon
+              width="26px"
+              height="26px"
+              className="absolute top-1/2 left-0 -translate-y-1/2"
+            />
+            {bedrooms}
+          </span>
+          <span className="relative pl-8 min-h-[2.5rem] leading-[2.5rem]">
+            <BathroomIcon
+              width="26px"
+              height="26px"
+              className="absolute top-1/2 left-0 -translate-y-1/2"
+            />
+            {bathrooms}
+          </span>
+          <span className="relative pl-8 min-h-[2.5rem] leading-[2.5rem]">
+            <CarIcon
+              width="26px"
+              height="26px"
+              className="absolute top-1/2 left-0 -translate-y-1/2"
+            />
+            {carspace}
+          </span>
+          <span className="relative pl-8 min-h-[2.5rem] leading-[2.5rem]">
+            <RulerIcon
+              width="26px"
+              height="26px"
+              className="absolute top-1/2 left-0 -translate-y-1/2"
+            />
+            {listingSize} SQFT
+          </span>
+        </div>
+        <div className="card-actions">
+          <Link className="btn btn-primary btn-block mx-0" to={`/listing/${docID}`}>
+            More info
+          </Link>
         </div>
       </div>
-    </>
+    </article>
   );
 }
 
