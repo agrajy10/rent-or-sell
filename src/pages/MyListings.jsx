@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
+import ListingItem from '../components/ListingItem';
 
 import { auth, db } from '../firebase.config';
-import ListingItem from '../components/ListingItem';
-import { toast } from 'react-toastify';
 
 function MyListings() {
   const initalRender = useRef(true);
