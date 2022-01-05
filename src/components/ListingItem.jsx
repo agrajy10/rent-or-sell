@@ -18,7 +18,8 @@ function ListingItem({
   onOffer,
   regularPrice,
   title,
-  type
+  type,
+  deleteListing
 }) {
   const listingType = type === 'sale' ? 'For Sale' : 'For Rent';
   const listingPrice = onOffer ? discountPrice : regularPrice;
@@ -79,6 +80,14 @@ function ListingItem({
           <Link className="btn btn-primary btn-block mx-0" to={`/listing/${docID}`}>
             More info
           </Link>
+          {deleteListing && (
+            <button
+              className="btn btn-accent btn-block mx-0"
+              type="button"
+              onClick={() => deleteListing(docID)}>
+              Delete
+            </button>
+          )}
         </div>
       </div>
     </article>
