@@ -38,7 +38,7 @@ function App() {
             <Route path="/my-listings" element={<MyListings />} />
           </Route>
           <Route path="/edit-listing/:listingId" element={<PrivateRoute />}>
-            <Route path="/edit-listing/:listingId-" element={<EditListing />} />
+            <Route path="/edit-listing/:listingId" element={<EditListing />} />
           </Route>
         </Routes>
         <Footer />
