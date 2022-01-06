@@ -4,6 +4,8 @@ import { ReactComponent as BedroomIcon } from '../assets/svg/bed.svg';
 import { ReactComponent as BathroomIcon } from '../assets/svg/bathtub.svg';
 import { ReactComponent as CarIcon } from '../assets/svg/car.svg';
 import { ReactComponent as RulerIcon } from '../assets/svg/ruler.svg';
+import { ReactComponent as TrashIcon } from '../assets/svg/trash.svg';
+import { ReactComponent as EditIcon } from '../assets/svg/pen.svg';
 import { Link } from 'react-router-dom';
 
 function ListingItem({
@@ -19,7 +21,8 @@ function ListingItem({
   regularPrice,
   title,
   type,
-  deleteListing
+  deleteListing,
+  editListing
 }) {
   const listingType = type === 'sale' ? 'For Sale' : 'For Rent';
   const listingPrice = onOffer ? discountPrice : regularPrice;
@@ -80,14 +83,25 @@ function ListingItem({
           <Link className="btn btn-primary btn-block mx-0" to={`/listing/${docID}`}>
             More info
           </Link>
-          {deleteListing && (
-            <button
-              className="btn btn-accent btn-block mx-0"
-              type="button"
-              onClick={() => deleteListing(docID)}>
-              Delete
-            </button>
-          )}
+          <div className="grid grid-cols-2 gap-2 flex-grow">
+            {editListing && (
+              <Link
+                aria-label="Edit listing"
+                className="btn btn-secondary btn-block mx-0"
+                to={`/edit-listing/${docID}`}>
+                <EditIcon className="w-6 h-6 text-white" />
+              </Link>
+            )}
+            {deleteListing && (
+              <button
+                aria-label="Delete listing"
+                className="btn btn-accent btn-block mx-0"
+                type="button"
+                onClick={() => deleteListing(docID)}>
+                <TrashIcon className="w-7 h-7 text-white" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </article>
