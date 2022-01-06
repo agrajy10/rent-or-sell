@@ -34,9 +34,6 @@ function EditListing() {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
-          data.latitude = data.geolocation.latitude;
-          data.longitude = data.geolocation.longitude;
-          delete data.geolocation;
           setListing(data);
         } else {
           throw new Error('Listing does not exist');
@@ -132,10 +129,20 @@ function EditListing() {
                   {values.customGeolocationEnabled && (
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <TextInput label="Latitude" id="latitude" name="latitude" type="text" />
+                        <TextInput
+                          label="Latitude"
+                          id="latitude"
+                          name="geolocation.latitude"
+                          type="text"
+                        />
                       </div>
                       <div>
-                        <TextInput label="Longitude" id="longitude" name="longitude" type="text" />
+                        <TextInput
+                          label="Longitude"
+                          id="longitude"
+                          name="geolocation.longitude"
+                          type="text"
+                        />
                       </div>
                     </div>
                   )}

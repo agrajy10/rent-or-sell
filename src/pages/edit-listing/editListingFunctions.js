@@ -53,7 +53,7 @@ export const updateListing = async (values, listingId) => {
   try {
     const formData = { ...values };
 
-    if (!formData.geolocationEnabled) {
+    if (!formData.customGeolocationEnabled) {
       const [data, error] = await getCoordinates(formData.address);
       if (error) {
         throw new Error(error);
@@ -61,11 +61,6 @@ export const updateListing = async (values, listingId) => {
       formData.geolocation = {
         latitude: data[0].lat,
         longitude: data[0].lon
-      };
-    } else {
-      formData.geolocation = {
-        latitude: formData.latitude,
-        longitude: formData.longitude
       };
     }
 
@@ -82,9 +77,6 @@ export const updateListing = async (values, listingId) => {
       newImgUrls = [...newImgUrls, ...imgUrls];
     }
 
-    delete formData.latitude;
-    delete formData.longitude;
-    delete formData.geolocationEnabled;
     delete formData.images;
     delete formData.imgUrls;
 
