@@ -6,14 +6,13 @@ const validationSchema = Yup.object({
   description: Yup.string(),
   address: Yup.string().required('Required'),
   bedrooms: Yup.number().min(1, 'Cannot be less than one').required('Required'),
-  geolocationEnabled: Yup.boolean(),
-  latitude: Yup.number().when('geolocationEnabled', {
+  customGeolocationEnabled: Yup.boolean(),
+  geolocation: Yup.object().when('customGeolocationEnabled', {
     is: true,
-    then: Yup.number().integer('Invalid value').required('Required')
-  }),
-  longitude: Yup.number().when('geolocationEnabled', {
-    is: true,
-    then: Yup.number().integer('Invalid value').required('Required')
+    then: Yup.object({
+      latitude: Yup.number().required('Required'),
+      longtiude: Yup.number().required('Required')
+    })
   }),
   bathrooms: Yup.number().min(1, 'Cannot be less than one').required('Required'),
   carspace: Yup.number().min(0, 'Cannot be less than zero').required('Required'),

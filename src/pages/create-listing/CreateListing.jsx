@@ -8,21 +8,15 @@ import TextAreaInput from '../../components/TextAreaInput';
 import ToggleInput from '../../components/ToggleInput';
 import RadioInput from '../../components/RadioInput';
 import FileInput from '../../components/FileInput';
+import UploadedImageThumb from '../../components/UploadedImageThumb';
 
 import validationSchema from './validationSchema';
 import initialValues from './initalValues';
 import { submitListingData, deleteSelectedImage } from './createListingFunctions';
 
-import { ReactComponent as DeleteIcon } from '../../assets/svg/delete.svg';
-
 function CreateListing() {
   const [imageThumbs, setImageThumbs] = useState([]);
   const navigate = useNavigate();
-
-  const onSubmit = async (values) => {
-    const listingId = await submitListingData(values);
-    navigate(`/listing/${listingId}`);
-  };
 
   const onDropHanlder = (acceptedFiles, setFieldValue) => {
     setImageThumbs(
@@ -33,6 +27,11 @@ function CreateListing() {
       )
     );
     setFieldValue('images', acceptedFiles);
+  };
+
+  const onSubmit = async (values) => {
+    const listingId = await submitListingData(values);
+    navigate(`/listing/${listingId}`);
   };
 
   return (
@@ -80,18 +79,28 @@ function CreateListing() {
                     <div className="inline-block mt-2">
                       <ToggleInput
                         label="Enter geolocation manually"
-                        id="geolocationEnabled"
-                        name="geolocationEnabled"
+                        id="customGeolocationEnabled"
+                        name="customGeolocationEnabled"
                       />
                     </div>
                   </div>
-                  {values.geolocationEnabled && (
+                  {values.customGeolocationEnabled && (
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <TextInput label="Latitude" id="latitude" name="latitude" type="text" />
+                        <TextInput
+                          label="Latitude"
+                          id="latitude"
+                          name="geolocation.latitude"
+                          type="text"
+                        />
                       </div>
                       <div>
-                        <TextInput label="Longitude" id="longitude" name="longitude" type="text" />
+                        <TextInput
+                          label="Longitude"
+                          id="longitude"
+                          name="geolocation.longitude"
+                          type="text"
+                        />
                       </div>
                     </div>
                   )}
@@ -166,15 +175,12 @@ function CreateListing() {
                       name="images"
                       label="Upload listing images (.jpg, .png)"
                     />
-                    {!!imageThumbs.length && (
+                    {imageThumbs.length > 0 && (
                       <ul className="flex items-center justify-start flex-wrap gap-4 mt-4">
                         {imageThumbs.map((file) => (
-                          <li key={uuidv4()} className="flex-shrink-0 relative">
-                            <img
-                              className="w-24 h-24 border border-gray-200 rounded"
+                          <li key={uuidv4()} className="flex-shrink-0 relative w-24 h-24">
+                            <UploadedImageThumb
                               src={file.preview}
-                            />
-                            <button
                               onClick={() =>
                                 deleteSelectedImage(
                                   imageThumbs,
@@ -183,11 +189,7 @@ function CreateListing() {
                                   setImageThumbs
                                 )
                               }
-                              type="button"
-                              aria-label="Delete image"
-                              className="delete-btn">
-                              <DeleteIcon className="h-3 w-3" />
-                            </button>
+                            />
                           </li>
                         ))}
                       </ul>

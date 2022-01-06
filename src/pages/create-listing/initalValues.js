@@ -3,9 +3,11 @@ const initialValues = {
   title: '',
   description: '',
   address: '',
-  geolocationEnabled: false,
-  latitude: 0,
-  longitude: 0,
+  customGeolocationEnabled: false,
+  geolocation: {
+    latitude: 0,
+    longitude: 0
+  },
   bedrooms: 1,
   bathrooms: 1,
   carspace: 1,

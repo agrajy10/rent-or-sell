@@ -53,7 +53,7 @@ export const submitListingData = async (values) => {
   try {
     const formData = { ...values, userRef: auth.currentUser.uid, postedOn: serverTimestamp() };
 
-    if (!formData.geolocationEnabled) {
+    if (!formData.customGeolocationEnabled) {
       const [data, error] = await getCoordinates(formData.address);
       if (error) {
         throw new Error(error);
@@ -61,11 +61,6 @@ export const submitListingData = async (values) => {
       formData.geolocation = {
         latitude: data[0].lat,
         longitude: data[0].lon
-      };
-    } else {
-      formData.geolocation = {
-        latitude: formData.latitude,
-        longitude: formData.longitude
       };
     }
 
@@ -76,9 +71,6 @@ export const submitListingData = async (values) => {
       }
     );
 
-    delete formData.latitude;
-    delete formData.longitude;
-    delete formData.geolocationEnabled;
     delete formData.images;
 
     const listingDocRef = await addDoc(collection(db, 'listings'), { ...formData, imgUrls });
