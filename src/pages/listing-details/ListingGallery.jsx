@@ -5,7 +5,11 @@ SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
 function ListingGallery({ imgUrls, title }) {
   return (
-    <Swiper slidesPerView={1} pagination={{ clickable: true }} className="listing-gallery-carousel">
+    <Swiper
+      autoHeight={true}
+      slidesPerView={1}
+      pagination={{ clickable: true }}
+      className="listing-gallery-carousel">
       {imgUrls.map((imageURL, index) => (
         <SwiperSlide key={index}>
           <img src={imageURL} className="w-full" alt={`${title} image ${index + 1}`} />
