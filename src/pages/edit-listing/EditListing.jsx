@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { toast } from 'react-toastify';
 import { doc, getDoc } from 'firebase/firestore';
 
 import TextInput from '../../components/TextInput';
@@ -13,7 +14,7 @@ import UploadedImageThumb from '../../components/UploadedImageThumb';
 
 import validationSchema from './validationSchema';
 import { updateListing, deleteUploadedImage, deleteSelectedImage } from './editListingFunctions';
-import { db } from '../../firebase.config';
+import { db, auth } from '../../firebase.config';
 
 function EditListing() {
   const [imageThumbs, setImageThumbs] = useState([]);
@@ -22,6 +23,7 @@ function EditListing() {
   const [error, setError] = useState('');
 
   const { listingId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = 'Edit listing | Rent or Sell';
@@ -47,6 +49,13 @@ function EditListing() {
 
     getListing();
   }, [listingId]);
+
+  useEffect(() => {
+    if (listing && listing.userRef !== auth.currentUser.uid) {
+      toast.error('You cannot edit that listing');
+      navigate('/');
+    }
+  }, [listing]);
 
   const onDropHanlder = (acceptedFiles, setFieldValue) => {
     setImageThumbs(
