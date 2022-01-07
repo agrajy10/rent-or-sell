@@ -20,7 +20,13 @@ export const getCoordinates = async (address) => {
 
     return [data, null];
   } catch (error) {
-    return [null, error.message];
+    if (error.response && error.response.status === 404) {
+      return [null, 'Invalid address'];
+    } else if (error.response) {
+      return [null, error.response.data.error];
+    } else {
+      return [null, error.message];
+    }
   }
 };
 

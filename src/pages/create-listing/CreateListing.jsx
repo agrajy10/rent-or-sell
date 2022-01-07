@@ -31,7 +31,9 @@ function CreateListing() {
 
   const onSubmit = async (values) => {
     const listingId = await submitListingData(values);
-    navigate(`/listing/${listingId}`);
+    if (listingId) {
+      navigate(`/listing/${listingId}`);
+    }
   };
 
   return (
