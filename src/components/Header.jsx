@@ -9,7 +9,7 @@ function Header() {
     <header className={`py-5 w-full ${location.pathname === '/' && 'absolute top-0 left-0 z-40'}`}>
       <div className="max-w-7xl mx-auto px-3 flex items-center justify-start">
         <h1
-          className={`font-semibold text-2xl hover:opacity-90 ${
+          className={`font-bold text-2xl hover:opacity-90 ${
             location.pathname === '/' ? 'text-white lg:text-gray-900' : 'text-gray-900'
           }`}>
           <Link to="/">Rent or Sell</Link>
