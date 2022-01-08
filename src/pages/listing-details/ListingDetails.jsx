@@ -82,7 +82,7 @@ function ListingDetails() {
         </section>
         <section className="lg:pt-24 md:pt-20 pt-14">
           <h2 className="text-gray-900 font-extrabold text-3xl mb-4">Location</h2>
-          <div className="w-full h-96">
+          <div className="w-full h-[40rem]">
             <ListingLocation {...geolocation} />
           </div>
         </section>
