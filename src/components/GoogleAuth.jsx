@@ -20,7 +20,7 @@ function GoogleAuth() {
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) {
         await setDoc(doc(db, 'users', user.uid), {
-          name: user.displayName,
+          fullname: user.displayName,
           email: user.email,
           createdOn: serverTimestamp()
         });
