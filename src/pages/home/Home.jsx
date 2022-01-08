@@ -1,14 +1,18 @@
 import HeroSection from './HeroSection';
+import BrowseByCateogry from './BrowseByCategory';
+import ForSaleSection from './ForSaleSection';
+import ForRentSection from './ForRentSection';
 
 function Home() {
   return (
     <main>
       <HeroSection />
-      <section className="max-w-7xl mx-auto px-3 lg:py-24 md:py-20 py-14">
-        <h2 className="text-4xl md:text-5xl lg:text-6xl text-gray-900 text-center font-bold lg:mb-20 mb-16">
-          All listings
-        </h2>
-        <div className="grid grid-cols-1 gap-4 xl:gap-8 sm:grid-cols-2 lg:grid-cols-3"></div>
+      <BrowseByCateogry />
+      <section className="max-w-7xl mx-auto px-3 lg:pb-24 md:pb-20 pb-14">
+        <ForSaleSection />
+      </section>
+      <section className="max-w-7xl mx-auto px-3 lg:pb-24 md:pb-20 pb-14">
+        <ForRentSection />
       </section>
     </main>
   );
