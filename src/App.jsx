@@ -6,12 +6,12 @@ import './css/main.css';
 
 import Footer from './components/Footer';
 import Header from './components/Header';
-import Home from './pages/Home';
+import Home from './pages/home/Home';
 import PrivateRoute from './components/PrivateRoute';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import ForgotPassword from './pages/ForgotPassword';
-import Profile from './pages/Profile';
+import Login from './pages/login/Login';
+import Signup from './pages/sign-up/Signup';
+import ForgotPassword from './pages/forgot-password/ForgotPassword';
+import Profile from './pages/profile/Profile';
 import CreateListing from './pages/create-listing/CreateListing';
 import ListingDetails from './pages/listing-details/ListingDetails';
 import MyListings from './pages/MyListings';

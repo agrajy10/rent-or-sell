@@ -1,5 +1,4 @@
-import HeroSection from '../components/HeroSection';
-import ListingItem from '../components/ListingItem';
+import HeroSection from './HeroSection';
 
 function Home() {
   return (
