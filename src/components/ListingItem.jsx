@@ -34,7 +34,7 @@ function ListingItem({
   const listingPriceText = `${formatPrice(listingPrice)} ${type === 'rent' ? ' / month' : ''}`;
 
   return (
-    <article className="card shadow-xl card-bordered border-gray-200 relative">
+    <article className="card shadow-md card-bordered border-gray-200 relative">
       <div className="absolute flex items-center top-0 left-0 w-full p-4 gap-2">
         {listingOfferTag}
         <span className="listing-type bg-primary ml-auto">{listingPriceText}</span>
