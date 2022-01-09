@@ -83,25 +83,27 @@ function ListingItem({
           <Link className="btn btn-primary btn-block mx-0" to={`/listing/${docID}`}>
             More info
           </Link>
-          <div className="grid grid-cols-2 gap-2 flex-grow">
-            {editListing && (
-              <Link
-                aria-label="Edit listing"
-                className="btn btn-secondary btn-block mx-0"
-                to={`/edit-listing/${docID}`}>
-                <EditIcon className="w-6 h-6 text-white" />
-              </Link>
-            )}
-            {deleteListing && (
-              <button
-                aria-label="Delete listing"
-                className="btn btn-accent btn-block mx-0"
-                type="button"
-                onClick={() => deleteListing(docID)}>
-                <TrashIcon className="w-7 h-7 text-white" />
-              </button>
-            )}
-          </div>
+          {editListing || deleteListing ? (
+            <div className="grid grid-cols-2 gap-2 flex-grow">
+              {editListing && (
+                <Link
+                  aria-label="Edit listing"
+                  className="btn btn-secondary btn-block mx-0"
+                  to={`/edit-listing/${docID}`}>
+                  <EditIcon className="w-6 h-6 text-white" />
+                </Link>
+              )}
+              {deleteListing && (
+                <button
+                  aria-label="Delete listing"
+                  className="btn btn-accent btn-block mx-0"
+                  type="button"
+                  onClick={() => deleteListing(docID)}>
+                  <TrashIcon className="w-7 h-7 text-white" />
+                </button>
+              )}
+            </div>
+          ) : null}
         </div>
       </div>
     </article>
