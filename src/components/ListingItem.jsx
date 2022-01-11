@@ -1,4 +1,6 @@
-import { formatPrice } from '../utils/utils';
+import { Link } from 'react-router-dom';
+
+import SaveButton from './SaveButton';
 
 import { ReactComponent as BedroomIcon } from '../assets/svg/bed.svg';
 import { ReactComponent as BathroomIcon } from '../assets/svg/bathtub.svg';
@@ -6,7 +8,8 @@ import { ReactComponent as CarIcon } from '../assets/svg/car.svg';
 import { ReactComponent as RulerIcon } from '../assets/svg/ruler.svg';
 import { ReactComponent as TrashIcon } from '../assets/svg/trash.svg';
 import { ReactComponent as EditIcon } from '../assets/svg/pen.svg';
-import { Link } from 'react-router-dom';
+
+import { formatPrice } from '../utils/utils';
 
 function ListingItem({
   address,
@@ -83,6 +86,7 @@ function ListingItem({
           <Link className="btn btn-primary btn-block mx-0" to={`/listing/${docID}`}>
             More info
           </Link>
+          <SaveButton docID={docID} />
           {editListing || deleteListing ? (
             <div className="grid grid-cols-2 gap-2 flex-grow">
               {editListing && (
