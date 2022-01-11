@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 
 import { ReactComponent as HeartOutLineIcon } from '../assets/svg/heart-outline.svg';
@@ -10,7 +11,13 @@ import { toast } from 'react-toastify';
 function SaveButton({ docID }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const navigate = useNavigate();
+
   const onClick = async () => {
+    if (!auth.currentUser) {
+      navigate('/login');
+      return;
+    }
     setIsSubmitting(true);
     try {
       const userRef = doc(db, 'users', auth.currentUser.uid);
