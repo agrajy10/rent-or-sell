@@ -16,7 +16,7 @@ import CreateListing from './pages/create-listing/CreateListing';
 import ListingDetails from './pages/listing-details/ListingDetails';
 import MyListings from './pages/MyListings';
 import EditListing from './pages/edit-listing/EditListing';
-import Category from './pages/Category';
+import Category from './pages/category/Category';
 
 function App() {
   return (
