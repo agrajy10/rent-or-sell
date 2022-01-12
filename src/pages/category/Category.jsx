@@ -1,8 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { getListingsByCategory, getFilteredListings } from './filterFunctions';
 import ListingItem from '../../components/ListingItem';
+
+import { FavoritesContext } from '../../context/FavoritesContext';
+
+import { getListingsByCategory, getFilteredListings } from './filterFunctions';
 
 function Category() {
   const initalRender = useRef(true);
@@ -10,6 +13,7 @@ function Category() {
   const [sortBy, setSortBy] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { checkFavorite } = useContext(FavoritesContext);
 
   const { categoryName } = useParams();
 
@@ -86,7 +90,14 @@ function Category() {
         {listings.length > 0 && (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             {listings.map(({ docID, data }) => {
-              return <ListingItem key={docID} {...data} docID={docID} />;
+              return (
+                <ListingItem
+                  key={docID}
+                  docID={docID}
+                  isFavorite={checkFavorite(docID)}
+                  {...data}
+                />
+              );
             })}
           </div>
         )}

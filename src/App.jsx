@@ -18,33 +18,37 @@ import MyListings from './pages/MyListings';
 import EditListing from './pages/edit-listing/EditListing';
 import Category from './pages/category/Category';
 
+import { FavoritesProvider } from './context/FavoritesContext';
+
 function App() {
   return (
     <div className="App font-sans">
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/profile" element={<PrivateRoute />}>
-            <Route path="/profile" element={<Profile />} />
-          </Route>
-          <Route path="/create-listing" element={<PrivateRoute />}>
-            <Route path="/create-listing" element={<CreateListing />} />
-          </Route>
-          <Route path="/listing/:listingId" element={<ListingDetails />} />
-          <Route path="/my-listings" element={<PrivateRoute />}>
-            <Route path="/my-listings" element={<MyListings />} />
-          </Route>
-          <Route path="/edit-listing/:listingId" element={<PrivateRoute />}>
-            <Route path="/edit-listing/:listingId" element={<EditListing />} />
-          </Route>
-          <Route path="/category/:categoryName" element={<Category />} />
-        </Routes>
-        <Footer />
-      </Router>
+      <FavoritesProvider>
+        <Router>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/profile" element={<PrivateRoute />}>
+              <Route path="/profile" element={<Profile />} />
+            </Route>
+            <Route path="/create-listing" element={<PrivateRoute />}>
+              <Route path="/create-listing" element={<CreateListing />} />
+            </Route>
+            <Route path="/listing/:listingId" element={<ListingDetails />} />
+            <Route path="/my-listings" element={<PrivateRoute />}>
+              <Route path="/my-listings" element={<MyListings />} />
+            </Route>
+            <Route path="/edit-listing/:listingId" element={<PrivateRoute />}>
+              <Route path="/edit-listing/:listingId" element={<EditListing />} />
+            </Route>
+            <Route path="/category/:categoryName" element={<Category />} />
+          </Routes>
+          <Footer />
+        </Router>
+      </FavoritesProvider>
       <ToastContainer position="top-center" />
     </div>
   );

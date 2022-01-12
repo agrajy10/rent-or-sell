@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { doc, getDoc } from 'firebase/firestore';
 import { format } from 'date-fns';
 
 import ListingInfoCard from './ListingInfoCard';
 import ListingGallery from './ListingGallery';
 import ListingLocation from './ListingLocation';
+import SaveButton from '../../components/SaveButton';
+
+import { FavoritesContext } from '../../context/FavoritesContext';
 
 import { db } from '../../firebase.config';
 
@@ -14,6 +16,7 @@ function ListingDetails() {
   const [listing, setListing] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { checkFavorite } = useContext(FavoritesContext);
 
   const { listingId } = useParams();
 
@@ -68,7 +71,8 @@ function ListingDetails() {
             </div>
           </div>
           <div className="lg:order-1">
-            <span className="block text-sm text-gray-500 mb-3">
+            <SaveButton isFavorite={checkFavorite(listingId)} docID={listingId} />
+            <span className="block text-sm text-gray-500 mb-3 mt-4">
               Posted on : {format(postedOn.toDate(), 'd LLLL, y')}
             </span>
             <address className="not-italic text-lg text-gray-900 mb-3">{address}</address>
