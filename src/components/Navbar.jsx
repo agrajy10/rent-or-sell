@@ -36,6 +36,11 @@ function Navbar() {
               </Link>
             </li>
             <li>
+              <Link to="/favorites" className={navLinkClass}>
+                Saved listings
+              </Link>
+            </li>
+            <li>
               <button onClick={logOut} type="button" className={navLinkClass}>
                 Logout
               </button>
