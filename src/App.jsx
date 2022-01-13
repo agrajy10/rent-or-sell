@@ -18,6 +18,7 @@ import MyListings from './pages/MyListings';
 import EditListing from './pages/edit-listing/EditListing';
 import Category from './pages/category/Category';
 import SavedListings from './pages/SavedListings';
+import Messages from './pages/Messages';
 
 import { FavoritesProvider } from './context/FavoritesContext';
 
@@ -47,6 +48,9 @@ function App() {
             </Route>
             <Route path="/favorites" element={<PrivateRoute />}>
               <Route path="/favorites" element={<SavedListings />} />
+            </Route>
+            <Route path="/messages" element={<PrivateRoute />}>
+              <Route path="/messages" element={<Messages />} />
             </Route>
             <Route path="/category/:categoryName" element={<Category />} />
           </Routes>
