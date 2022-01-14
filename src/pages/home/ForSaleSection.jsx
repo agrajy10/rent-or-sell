@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
 
 import ListingsCarousel from '../../components/ListingsCarousel';
 
@@ -39,6 +40,22 @@ function ForSaleSection() {
     getListingsForSale();
   }, []);
 
+  const listingsCarouselConfig = {
+    slidesPerView: 1,
+    spaceBetween: 20,
+    breakpoints: {
+      768: {
+        slidesPerView: 2
+      },
+      992: {
+        slidesPerView: 3
+      },
+      1280: {
+        slidesPerView: 2
+      }
+    }
+  };
+
   return (
     <div className="xl:grid xl:grid-cols-12 xl:gap-4 xl:items-center">
       <div className="col-span-4 xl:pr-16 text-center xl:text-left">
@@ -47,30 +64,21 @@ function ForSaleSection() {
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nisi officia expedita et non
           vero quos.
         </p>
-        <button type="button" className="btn btn-primary w-40 mb-12 xl:mb-0">
+        <Link to="/category/sale" className="btn btn-primary w-40 mb-8 xl:mb-0">
           View all
-        </button>
+        </Link>
       </div>
       <div className="col-span-8">
-        {loading && <p>Loading...</p>}
+        {loading && (
+          <ListingsCarousel
+            loading={loading}
+            listings={Array(4).fill()}
+            {...listingsCarouselConfig}
+          />
+        )}
         {error && <p>{error}</p>}
         {!loading && !error && (
-          <ListingsCarousel
-            listings={listings}
-            slidesPerView={1}
-            spaceBetween={20}
-            breakpoints={{
-              768: {
-                slidesPerView: 2
-              },
-              992: {
-                slidesPerView: 3
-              },
-              1280: {
-                slidesPerView: 2
-              }
-            }}
-          />
+          <ListingsCarousel loading={loading} listings={listings} {...listingsCarouselConfig} />
         )}
       </div>
     </div>

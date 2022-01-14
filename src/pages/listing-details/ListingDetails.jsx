@@ -14,6 +14,7 @@ import { ReactComponent as MailIcon } from '../../assets/svg/mail.svg';
 import { FavoritesContext } from '../../context/FavoritesContext';
 
 import { db, auth } from '../../firebase.config';
+import ListingDetailsSkeleton from '../../skeletons/ListingDetailsSkeleton';
 
 function ListingDetails() {
   const [listing, setListing] = useState({});
@@ -47,11 +48,7 @@ function ListingDetails() {
   const { address, description, geolocation, imgUrls, onOffer, postedOn, title } = listing;
 
   if (loading) {
-    return (
-      <div className="min-h-screen max-w-7xl mx-auto px-3 lg:py-24 md:py-20 py-14">
-        <p>Loading....</p>
-      </div>
-    );
+    return <ListingDetailsSkeleton />;
   }
 
   if (error) {
@@ -76,7 +73,9 @@ function ListingDetails() {
               </div>
             </div>
             <div className="lg:order-1">
-              <SaveButton isFavorite={checkFavorite(listingId)} docID={listingId} />
+              {auth.currentUser && auth.currentUser.uid !== listing.userRef ? (
+                <SaveButton isFavorite={checkFavorite(listingId)} docID={listingId} />
+              ) : null}
               {auth.currentUser && auth.currentUser.uid !== listing.userRef ? (
                 <button
                   type="button"

@@ -1,28 +1,25 @@
 import { Link } from 'react-router-dom';
 
-import heroSectionBg from '../../assets/images/hero-section-bg.jpg';
-
 function HeroSection() {
   return (
-    <section className="relative h-[50rem] bg-white">
-      <div className="w-full lg:w-1/2 h-full absolute top-0 right-0 bg-black">
-        <img src={heroSectionBg} alt="" className="w-full h-full object-cover opacity-70" />
-      </div>
-      <div className="max-w-7xl mx-auto px-3 h-full flex items-center">
-        <div className="text-center lg:w-1/2 lg:text-left lg:pr-16 relative z-40">
-          <h1 className=" text-white lg:text-gray-900 text-5xl md:text-6xl lg:text-7xl font-extrabold mb-8">
-            Rent or sell house at best price.{' '}
-          </h1>
-          <p className="text-white lg:text-gray-600 leading-loose mb-12">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia tenetur consectetur
-            voluptas deleniti iure quas aliquam laboriosam fuga quos.
-          </p>
-          <Link to="/login" className="btn btn-secondary normal-case sm:mr-2 mb-4 w-48">
-            List your house
+    <section className="relative overflow-hidden bg-gray-900 text-gray-300 px-3 min-h-[40rem] flex items-center justify-center">
+      <div className="w-full max-w-7xl text-center py-14">
+        <h1 className="text-white text-6xl lg:text-7xl font-extrabold mb-4">
+          Rent or sell house at best price.
+        </h1>
+        <p className="leading-loose mb-10 max-w-2xl mx-auto">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia tenetur consectetur
+          voluptas deleniti iure quas aliquam laboriosam fuga quos.
+        </p>
+        <div className="flex items-center justify-center flex-wrap gap-4">
+          <Link
+            to="/login"
+            className="btn bg-white text-gray-900 hover:bg-gray-200 flex-shrink-0 w-[160px]">
+            Login
           </Link>
-          <button type="button" className="btn btn-primary normal-case mb-4 w-48">
-            Explore
-          </button>
+          <Link to="/login" className="btn btn-primary flex-shrink-0 w-[160px]">
+            Sign up
+          </Link>
         </div>
       </div>
     </section>

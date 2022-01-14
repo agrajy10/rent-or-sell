@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { getDocs, collection, query, where, orderBy } from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
 
 import MessageItem from '../components/MessageItem';
+import MessageItemSkeleton from '../skeletons/MessageItemSkeleton';
 
 import { db, auth } from '../firebase.config';
 
@@ -43,7 +45,13 @@ function Messages() {
   if (loading) {
     return (
       <div className="min-h-screen max-w-7xl mx-auto px-3 lg:py-24 md:py-20 py-14">
-        <p>Loading....</p>
+        <div className="space-y-6">
+          {Array(9)
+            .fill()
+            .map((item) => (
+              <MessageItemSkeleton key={uuidv4()} />
+            ))}
+        </div>
       </div>
     );
   }
@@ -62,7 +70,6 @@ function Messages() {
         <div className="md:flex md:items-center md:justify-between">
           <h1 className="text-3xl md:text-4xl font-extrabold text-center mb-8">Messages</h1>
         </div>
-
         <div className="space-y-6">
           {messages.length ? (
             messages.map(({ docID, data }) => <MessageItem {...data} key={docID} />)

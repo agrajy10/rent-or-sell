@@ -4,7 +4,7 @@
 
 @layer components {
     .nav-link {
-        @apply btn btn-link px-2 hover:no-underline hover:opacity-60
+        @apply block py-2 text-sm text-gray-900 uppercase font-bold transition-opacity hover:opacity-60
     }
     
     .dropzone {
@@ -50,5 +50,4 @@
     .listing-type.rent {
         @apply bg-purple-700
     }
-
 }

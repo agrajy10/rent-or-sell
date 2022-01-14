@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 function CategoryBlock({ bgImage, categoryName, to }) {
   return (
-    <div className="w-full h-64 relative rounded-xl overflow-hidden bg-black group">
+    <div className="w-full h-52 md:h-64 relative rounded-xl overflow-hidden bg-black group">
       <Link to={to}>
         <img
           src={bgImage}

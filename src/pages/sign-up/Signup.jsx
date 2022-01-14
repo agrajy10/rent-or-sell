@@ -15,7 +15,7 @@ function Signup() {
   return (
     <FormContainer>
       <FormCard>
-        <FormHeading heading="Get started" />
+        <FormHeading>Get started</FormHeading>
         <GoogleAuth />
         <SignupForm />
         <p className="text-center text-sm font-medium text-gray-700">

@@ -19,6 +19,7 @@ import EditListing from './pages/edit-listing/EditListing';
 import Category from './pages/category/Category';
 import SavedListings from './pages/SavedListings';
 import Messages from './pages/Messages';
+import ScrollToTop from './components/ScrollToTop';
 
 import { FavoritesProvider } from './context/FavoritesContext';
 
@@ -27,34 +28,36 @@ function App() {
     <div className="App font-sans">
       <FavoritesProvider>
         <Router>
-          <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/profile" element={<PrivateRoute />}>
-              <Route path="/profile" element={<Profile />} />
-            </Route>
-            <Route path="/create-listing" element={<PrivateRoute />}>
-              <Route path="/create-listing" element={<CreateListing />} />
-            </Route>
-            <Route path="/listing/:listingId" element={<ListingDetails />} />
-            <Route path="/my-listings" element={<PrivateRoute />}>
-              <Route path="/my-listings" element={<MyListings />} />
-            </Route>
-            <Route path="/edit-listing/:listingId" element={<PrivateRoute />}>
-              <Route path="/edit-listing/:listingId" element={<EditListing />} />
-            </Route>
-            <Route path="/favorites" element={<PrivateRoute />}>
-              <Route path="/favorites" element={<SavedListings />} />
-            </Route>
-            <Route path="/messages" element={<PrivateRoute />}>
-              <Route path="/messages" element={<Messages />} />
-            </Route>
-            <Route path="/category/:categoryName" element={<Category />} />
-          </Routes>
-          <Footer />
+          <ScrollToTop>
+            <Header />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/profile" element={<PrivateRoute />}>
+                <Route path="/profile" element={<Profile />} />
+              </Route>
+              <Route path="/create-listing" element={<PrivateRoute />}>
+                <Route path="/create-listing" element={<CreateListing />} />
+              </Route>
+              <Route path="/listing/:listingId" element={<ListingDetails />} />
+              <Route path="/my-listings" element={<PrivateRoute />}>
+                <Route path="/my-listings" element={<MyListings />} />
+              </Route>
+              <Route path="/edit-listing/:listingId" element={<PrivateRoute />}>
+                <Route path="/edit-listing/:listingId" element={<EditListing />} />
+              </Route>
+              <Route path="/favorites" element={<PrivateRoute />}>
+                <Route path="/favorites" element={<SavedListings />} />
+              </Route>
+              <Route path="/messages" element={<PrivateRoute />}>
+                <Route path="/messages" element={<Messages />} />
+              </Route>
+              <Route path="/category/:categoryName" element={<Category />} />
+            </Routes>
+            <Footer />
+          </ScrollToTop>
         </Router>
       </FavoritesProvider>
       <ToastContainer position="top-center" />

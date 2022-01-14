@@ -15,7 +15,7 @@ function Login() {
   return (
     <FormContainer>
       <FormCard>
-        <FormHeading heading="Welcome back!" />
+        <FormHeading>Welcome back</FormHeading>
         <GoogleAuth />
         <LoginForm />
         <p className="text-center text-sm">

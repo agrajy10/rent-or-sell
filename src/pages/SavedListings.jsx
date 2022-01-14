@@ -1,7 +1,9 @@
 import { useState, useEffect, useContext, useRef } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
 
 import ListingItem from '../components/ListingItem';
+import ListingItemSkeleton from '../skeletons/ListingItemSkeleton';
 
 import { FavoritesContext } from '../context/FavoritesContext';
 
@@ -51,7 +53,13 @@ function SavedListings() {
   if (loading) {
     return (
       <div className="min-h-screen max-w-7xl mx-auto px-3 lg:py-24 md:py-20 py-14">
-        <p>Loading....</p>
+        <div className="grid grid-cols-1 gap-4 xl:gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {Array(9)
+            .fill()
+            .map((item) => (
+              <ListingItemSkeleton key={uuidv4()} />
+            ))}
+        </div>
       </div>
     );
   }
