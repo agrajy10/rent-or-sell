@@ -11,6 +11,11 @@ function Navbar({ loggedIn }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const handleClick = (e) => {
+      if (window.innerWidth < 1280 && e.target.closest('.navbar-dropdown')) {
+        setIsNavOpen(false);
+      }
+    };
     const onWindowResize = () => {
       if (window.innerWidth >= 1280) {
         if (!isNavOpen) {
@@ -22,7 +27,11 @@ function Navbar({ loggedIn }) {
     };
     onWindowResize();
     window.addEventListener('resize', onWindowResize);
-    return () => window.removeEventListener('resize', onWindowResize);
+    document.addEventListener('click', handleClick);
+    return () => {
+      window.removeEventListener('resize', onWindowResize);
+      document.removeEventListener('click', handleClick);
+    };
   }, []);
 
   const toggleNav = () => setIsNavOpen(!isNavOpen);
@@ -36,7 +45,7 @@ function Navbar({ loggedIn }) {
     <nav className="ml-auto relative flex items-center justify-end gap-2 xl:gap-6">
       {isNavOpen ? (
         loggedIn ? (
-          <ul className="xl:flex xl:items-center xl:justify-end xl:gap-6 xl:static xl:py-0 xl:mt-0 absolute top-full right-0 w-64 xl:w-auto z-50 py-4 bg-white shadow-lg  rounded-md border xl:border-none xl:shadow-none border-gray-200 mt-2">
+          <ul className="navbar-dropdown xl:flex xl:items-center xl:justify-end xl:gap-6 xl:static xl:py-0 xl:mt-0 absolute top-full right-0 w-64 xl:w-auto z-50 py-4 bg-white shadow-lg  rounded-md border xl:border-none xl:shadow-none border-gray-200 mt-2">
             <li>
               <Link to="/category/sale" className="xl:px-0 px-4 nav-link">
                 For Sale
@@ -79,7 +88,7 @@ function Navbar({ loggedIn }) {
             </li>
           </ul>
         ) : (
-          <ul className="xl:flex xl:items-center xl:justify-end xl:gap-6 xl:static xl:py-0 xl:mt-0 absolute top-full right-0 w-64 xl:w-auto z-50 py-4 bg-white shadow-lg  rounded-md border xl:border-none xl:shadow-none border-gray-200 mt-2">
+          <ul className="navbar-dropdown xl:flex xl:items-center xl:justify-end xl:gap-6 xl:static xl:py-0 xl:mt-0 absolute top-full right-0 w-64 xl:w-auto z-50 py-4 bg-white shadow-lg  rounded-md border xl:border-none xl:shadow-none border-gray-200 mt-2">
             <li>
               <Link to="/category/sale" className="xl:px-0 px-4 nav-link">
                 For Sale
