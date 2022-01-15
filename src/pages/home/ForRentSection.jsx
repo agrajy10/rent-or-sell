@@ -1,52 +1,35 @@
 import { useState, useEffect } from 'react';
-import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
+import { useCollectionOnce } from 'react-firebase-hooks/firestore';
+import { collection, query, where, orderBy, limit } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 
 import ListingsCarousel from '../../components/ListingsCarousel';
 
-import useAbortableEffect from '../../hooks/useAbortableEffect';
-
 import { db } from '../../firebase.config';
 
 function ForRentSection() {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [listings, setListings] = useState([]);
+  const [snapshot, loading, error] = useCollectionOnce(
+    query(
+      collection(db, 'listings'),
+      where('type', '==', 'rent'),
+      orderBy('postedOn', 'desc'),
+      limit(4)
+    )
+  );
 
-  useAbortableEffect((status) => {
-    const getListingsForRent = async () => {
-      try {
-        const listingsRef = collection(db, 'listings');
-        const q = query(
-          listingsRef,
-          where('type', '==', 'rent'),
-          orderBy('postedOn', 'desc'),
-          limit(4)
-        );
-        const querySnapshot = await getDocs(q);
-        const data = [];
-        querySnapshot.forEach((doc) => {
-          return data.push({
-            docID: doc.id,
-            data: doc.data()
-          });
+  useEffect(() => {
+    if (snapshot) {
+      const data = [];
+      snapshot.forEach((doc) => {
+        return data.push({
+          docID: doc.id,
+          data: doc.data()
         });
-        if (!status.aborted) {
-          setListings(data);
-        }
-      } catch (error) {
-        if (!status.aborted) {
-          setError(error.message);
-        }
-      } finally {
-        if (!status.aborted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    getListingsForRent();
-  }, []);
+      });
+      setListings(data);
+    }
+  }, [snapshot]);
 
   const listingsCarouselConfig = {
     slidesPerView: 1,
@@ -84,8 +67,8 @@ function ForRentSection() {
             {...listingsCarouselConfig}
           />
         )}
-        {error && <p>{error}</p>}
-        {!loading && !error && (
+        {error && <p>{error.message}</p>}
+        {listings.length > 0 && (
           <ListingsCarousel loading={loading} listings={listings} {...listingsCarouselConfig} />
         )}
       </div>
