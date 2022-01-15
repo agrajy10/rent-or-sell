@@ -38,7 +38,6 @@ function SavedListings() {
           setLoading(false);
         }
       };
-
       getSavedListings();
     },
     [favorites]
@@ -57,28 +56,6 @@ function SavedListings() {
     }
   }, [listingTypeOption]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen max-w-7xl mx-auto px-3 lg:py-24 md:py-20 py-14">
-        <div className="grid grid-cols-1 gap-4 xl:gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {Array(9)
-            .fill()
-            .map((item) => (
-              <ListingItemSkeleton key={uuidv4()} />
-            ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen max-w-7xl mx-auto px-3 lg:py-24 md:py-20 py-14">
-        <p>{error}</p>
-      </div>
-    );
-  }
-
   return (
     <main className="min-h-screen max-w-7xl px-3 mx-auto">
       <section className="lg:py-24 md:py-20 py-14">
@@ -94,13 +71,18 @@ function SavedListings() {
           </select>
         </div>
         <div className="grid grid-cols-1 gap-4 xl:gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredListings.length ? (
+          {loading &&
+            Array(9)
+              .fill()
+              .map((item) => <ListingItemSkeleton key={uuidv4()} />)}
+          {error && <p className="xl:col-span-3 md:col-span-2">{error}</p>}
+          {filteredListings.length === 0 && !error ? (
+            <p className="xl:col-span-3 md:col-span-2">No listings to show.</p>
+          ) : null}
+          {filteredListings.length > 0 &&
             filteredListings.map(({ docID, data }) => (
-              <ListingItem {...data} key={docID} docID={docID} isFavorite={checkFavorite(docID)} />
-            ))
-          ) : (
-            <p className="text-center text-lg lg:col-span-3 sm:col-span-2">No listings to show.</p>
-          )}
+              <ListingItem key={docID} docID={docID} isFavorite={checkFavorite(docID)} {...data} />
+            ))}
         </div>
       </section>
     </main>
