@@ -1,63 +1,45 @@
 import { useState, useEffect, useRef } from 'react';
-import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { collection, query, where, deleteDoc, doc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 
-import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import ListingItem from '../components/ListingItem';
-
-import useAbortableEffect from '../hooks/useAbortableEffect';
+import ListingItemSkeleton from '../skeletons/ListingItemSkeleton';
+import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 
 import { auth, db } from '../firebase.config';
-import ListingItemSkeleton from '../skeletons/ListingItemSkeleton';
 
 function MyListings() {
   const initalRender = useRef(true);
-  const [loading, setLoading] = useState(true);
+
   const [listings, setListings] = useState([]);
   const [filteredListings, setFilteredListings] = useState([]);
-  const [listingTypeOption, setListingTypeOption] = useState('all');
-  const [error, setError] = useState('');
   const [isConfirmationModalOpen, setisConfirmationModalOpen] = useState(false);
+  const [listingTypeOption, setListingTypeOption] = useState('all');
   const [listingDocId, setListingDocId] = useState('');
+
+  const [snapshot, loading, error] = useCollection(
+    query(collection(db, 'listings'), where('userRef', '==', auth.currentUser.uid))
+  );
 
   useEffect(() => {
     document.title = 'My Listings | Rent or Sell';
   }, []);
 
-  useAbortableEffect(
-    (status) => {
-      const getUserListings = async () => {
-        try {
-          const listingsRef = collection(db, 'listings');
-          const q = query(listingsRef, where('userRef', '==', auth.currentUser.uid));
-          const querySnapshot = await getDocs(q);
-          const data = [];
-          querySnapshot.forEach((doc) => {
-            return data.push({
-              docID: doc.id,
-              data: doc.data()
-            });
-          });
-          if (!status.aborted) {
-            setListings(data);
-            setFilteredListings(data);
-          }
-        } catch (error) {
-          if (!status.aborted) {
-            setError(error.message);
-          }
-        } finally {
-          if (!status.aborted) {
-            setLoading(false);
-          }
-        }
-      };
-
-      getUserListings();
-    },
-    [auth.currentUser.uid]
-  );
+  useEffect(() => {
+    if (snapshot) {
+      const listingsData = [];
+      snapshot.forEach((doc) => {
+        return listingsData.push({
+          docID: doc.id,
+          data: doc.data()
+        });
+      });
+      setListings(listingsData);
+      setFilteredListings(listingsData);
+    }
+  }, [snapshot]);
 
   useEffect(() => {
     if (!initalRender.current) {
@@ -99,28 +81,6 @@ function MyListings() {
     hideConfirmationModal();
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen max-w-7xl mx-auto px-3 lg:py-24 md:py-20 py-14">
-        <div className="grid grid-cols-1 gap-4 xl:gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {Array(9)
-            .fill()
-            .map((item) => (
-              <ListingItemSkeleton key={uuidv4()} />
-            ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen max-w-7xl mx-auto px-3 lg:py-24 md:py-20 py-14">
-        <p>{error}</p>
-      </div>
-    );
-  }
-
   return (
     <>
       <main className="min-h-screen max-w-7xl px-3 mx-auto">
@@ -137,21 +97,24 @@ function MyListings() {
             </select>
           </div>
           <div className="grid grid-cols-1 gap-4 xl:gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredListings.length ? (
+            {loading &&
+              Array(9)
+                .fill()
+                .map((item) => <ListingItemSkeleton key={uuidv4()} />)}
+            {error && <p className="xl:col-span-3 md:col-span-2">{error}</p>}
+            {filteredListings.length === 0 && !error ? (
+              <p className="xl:col-span-3 md:col-span-2">{error}</p>
+            ) : null}
+            {filteredListings.length > 0 &&
               filteredListings.map(({ docID, data }) => (
                 <ListingItem
-                  {...data}
                   key={docID}
                   docID={docID}
                   deleteListing={() => showConfirmationModal(docID)}
                   editListing={auth.currentUser.uid === data.userRef}
+                  {...data}
                 />
-              ))
-            ) : (
-              <p className="text-center text-lg lg:col-span-3 sm:col-span-2">
-                No listings to show.
-              </p>
-            )}
+              ))}
           </div>
         </section>
       </main>
