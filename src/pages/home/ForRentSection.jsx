@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 
 import ListingsCarousel from '../../components/ListingsCarousel';
 
+import useAbortableEffect from '../../hooks/useAbortableEffect';
+
 import { db } from '../../firebase.config';
 
 function ForRentSection() {
@@ -11,7 +13,7 @@ function ForRentSection() {
   const [error, setError] = useState('');
   const [listings, setListings] = useState([]);
 
-  useEffect(() => {
+  useAbortableEffect((status) => {
     const getListingsForRent = async () => {
       try {
         const listingsRef = collection(db, 'listings');
@@ -29,11 +31,17 @@ function ForRentSection() {
             data: doc.data()
           });
         });
-        setListings(data);
+        if (!status.aborted) {
+          setListings(data);
+        }
       } catch (error) {
-        setError(error.message);
+        if (!status.aborted) {
+          setError(error.message);
+        }
       } finally {
-        setLoading(false);
+        if (!status.aborted) {
+          setLoading(false);
+        }
       }
     };
 

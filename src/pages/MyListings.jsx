@@ -6,6 +6,8 @@ import { v4 as uuidv4 } from 'uuid';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import ListingItem from '../components/ListingItem';
 
+import useAbortableEffect from '../hooks/useAbortableEffect';
+
 import { auth, db } from '../firebase.config';
 import ListingItemSkeleton from '../skeletons/ListingItemSkeleton';
 
@@ -23,30 +25,39 @@ function MyListings() {
     document.title = 'My Listings | Rent or Sell';
   }, []);
 
-  useEffect(() => {
-    const getUserListings = async () => {
-      try {
-        const listingsRef = collection(db, 'listings');
-        const q = query(listingsRef, where('userRef', '==', auth.currentUser.uid));
-        const querySnapshot = await getDocs(q);
-        const data = [];
-        querySnapshot.forEach((doc) => {
-          return data.push({
-            docID: doc.id,
-            data: doc.data()
+  useAbortableEffect(
+    (status) => {
+      const getUserListings = async () => {
+        try {
+          const listingsRef = collection(db, 'listings');
+          const q = query(listingsRef, where('userRef', '==', auth.currentUser.uid));
+          const querySnapshot = await getDocs(q);
+          const data = [];
+          querySnapshot.forEach((doc) => {
+            return data.push({
+              docID: doc.id,
+              data: doc.data()
+            });
           });
-        });
-        setListings(data);
-        setFilteredListings(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+          if (!status.aborted) {
+            setListings(data);
+            setFilteredListings(data);
+          }
+        } catch (error) {
+          if (!status.aborted) {
+            setError(error.message);
+          }
+        } finally {
+          if (!status.aborted) {
+            setLoading(false);
+          }
+        }
+      };
 
-    getUserListings();
-  }, [auth.currentUser.uid]);
+      getUserListings();
+    },
+    [auth.currentUser.uid]
+  );
 
   useEffect(() => {
     if (!initalRender.current) {

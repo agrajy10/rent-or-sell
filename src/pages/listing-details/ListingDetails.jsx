@@ -13,6 +13,8 @@ import { ReactComponent as MailIcon } from '../../assets/svg/mail.svg';
 
 import { FavoritesContext } from '../../context/FavoritesContext';
 
+import useAbortableEffect from '../../hooks/useAbortableEffect';
+
 import { db, auth } from '../../firebase.config';
 import ListingDetailsSkeleton from '../../skeletons/ListingDetailsSkeleton';
 
@@ -25,25 +27,34 @@ function ListingDetails() {
 
   const { listingId } = useParams();
 
-  useEffect(() => {
-    const getListingData = async () => {
-      try {
-        const docRef = doc(db, 'listings', listingId);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setListing(docSnap.data());
-        } else {
-          throw new Error('Listing does not exist');
+  useAbortableEffect(
+    (status) => {
+      const getListingData = async () => {
+        try {
+          const docRef = doc(db, 'listings', listingId);
+          const docSnap = await getDoc(docRef);
+          if (!status.aborted) {
+            if (docSnap.exists()) {
+              setListing(docSnap.data());
+            } else {
+              throw new Error('Listing does not exist');
+            }
+          }
+        } catch (error) {
+          if (!status.aborted) {
+            setError(error.message);
+          }
+        } finally {
+          if (!status.aborted) {
+            setLoading(false);
+          }
         }
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+      };
 
-    getListingData();
-  }, [listingId]);
+      getListingData();
+    },
+    [listingId]
+  );
 
   const { address, description, geolocation, imgUrls, onOffer, postedOn, title } = listing;
 

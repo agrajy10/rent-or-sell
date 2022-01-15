@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import MessageItem from '../components/MessageItem';
 import MessageItemSkeleton from '../skeletons/MessageItemSkeleton';
 
+import useAbortableEffect from '../hooks/useAbortableEffect';
+
 import { db, auth } from '../firebase.config';
 
 function Messages() {
@@ -12,7 +14,7 @@ function Messages() {
   const [error, setError] = useState('');
   const [messages, setMessages] = useState([]);
 
-  useEffect(() => {
+  useAbortableEffect((status) => {
     document.title = 'Messages | Rent or Sell';
 
     const getMessages = async () => {
@@ -31,11 +33,17 @@ function Messages() {
             data: doc.data()
           });
         });
-        setMessages(data);
+        if (!status.aborted) {
+          setMessages(data);
+        }
       } catch (error) {
-        setError(error.message);
+        if (!status.aborted) {
+          setError(error.message);
+        }
       } finally {
-        setLoading(false);
+        if (!status.aborted) {
+          setLoading(false);
+        }
       }
     };
 

@@ -7,6 +7,8 @@ import ListingItemSkeleton from '../../skeletons/ListingItemSkeleton';
 
 import { FavoritesContext } from '../../context/FavoritesContext';
 
+import useAbortableEffect from '../../hooks/useAbortableEffect';
+
 import { getListingsByCategory, getFilteredListings } from './filterFunctions';
 
 function Category() {
@@ -19,18 +21,23 @@ function Category() {
 
   const { categoryName } = useParams();
 
-  useEffect(() => {
-    const getListingsData = async () => {
-      const [data, error] = await getListingsByCategory(categoryName);
-      if (error) {
-        setError(error);
-      } else {
-        setListings(data);
-      }
-      setLoading(false);
-    };
-    getListingsData();
-  }, [categoryName]);
+  useAbortableEffect(
+    (status) => {
+      const getListingsData = async () => {
+        const [data, error] = await getListingsByCategory(categoryName);
+        if (!status.aborted) {
+          if (error) {
+            setError(error);
+          } else {
+            setListings(data);
+          }
+          setLoading(false);
+        }
+      };
+      getListingsData();
+    },
+    [categoryName]
+  );
 
   useEffect(() => {
     if (!initalRender.current) {

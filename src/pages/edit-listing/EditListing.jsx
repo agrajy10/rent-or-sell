@@ -12,6 +12,8 @@ import RadioInput from '../../components/RadioInput';
 import FileInput from '../../components/FileInput';
 import UploadedImageThumb from '../../components/UploadedImageThumb';
 
+import useAbortableEffect from '../../hooks/useAbortableEffect';
+
 import validationSchema from './validationSchema';
 import { updateListing, deleteUploadedImage, deleteSelectedImage } from './editListingFunctions';
 import { db, auth } from '../../firebase.config';
@@ -29,26 +31,35 @@ function EditListing() {
     document.title = 'Edit listing | Rent or Sell';
   }, []);
 
-  useEffect(() => {
-    const getListing = async () => {
-      try {
-        const docRef = doc(db, 'listings', listingId);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setListing(data);
-        } else {
-          throw new Error('Listing does not exist');
+  useAbortableEffect(
+    (status) => {
+      const getListing = async () => {
+        try {
+          const docRef = doc(db, 'listings', listingId);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (!status.aborted) {
+              setListing(data);
+            }
+          } else {
+            throw new Error('Listing does not exist');
+          }
+        } catch (error) {
+          if (!status.aborted) {
+            setError(error.message);
+          }
+        } finally {
+          if (!status.aborted) {
+            setLoading(false);
+          }
         }
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+      };
 
-    getListing();
-  }, [listingId]);
+      getListing();
+    },
+    [listingId]
+  );
 
   useEffect(() => {
     if (listing && listing.userRef !== auth.currentUser.uid) {
