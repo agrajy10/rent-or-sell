@@ -4,11 +4,10 @@ import { db } from '../../firebase.config';
 
 export const getListingsByCategory = async (categoryName) => {
   if (categoryName !== 'sale' && categoryName !== 'rent') {
-    return [null, 'Invalid category'];
+    return [[], 'Invalid category'];
   }
   try {
-    const listingsRef = collection(db, 'listings');
-    const q = query(listingsRef, where('type', '==', categoryName));
+    const q = query(collection(db, 'listings'), where('type', '==', categoryName));
     const querySnapshot = await getDocs(q);
     const data = [];
     querySnapshot.forEach((doc) => {
@@ -17,18 +16,15 @@ export const getListingsByCategory = async (categoryName) => {
         data: doc.data()
       });
     });
-    if (data.length) {
-      return [data, null];
-    }
-    return [null, 'No listings found'];
+    return data.length ? [data, null] : [[], 'No listings found'];
   } catch (error) {
-    return [null, error.message];
+    return [[], error.message];
   }
 };
 
 export const getFilteredListings = async (categoryName, sortBy) => {
   if (categoryName !== 'sale' && categoryName !== 'rent') {
-    return [null, 'Invalid category'];
+    return [[], 'Invalid category'];
   }
   try {
     const listingsRef = collection(db, 'listings');
@@ -48,11 +44,8 @@ export const getFilteredListings = async (categoryName, sortBy) => {
         data: doc.data()
       });
     });
-    if (data.length) {
-      return [data, null];
-    }
-    return [null, 'No listings found'];
+    return data.length ? [data, null] : [[], 'No listings found'];
   } catch (error) {
-    return [null, error.message];
+    return [[], error.message];
   }
 };

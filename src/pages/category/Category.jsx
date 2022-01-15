@@ -13,25 +13,25 @@ import { getListingsByCategory, getFilteredListings } from './filterFunctions';
 
 function Category() {
   const initalRender = useRef(true);
-  const [listings, setListings] = useState([]);
   const [sortBy, setSortBy] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [data, setData] = useState({
+    listings: [],
+    loading: true,
+    error: ''
+  });
+
   const { checkFavorite } = useContext(FavoritesContext);
 
   const { categoryName } = useParams();
 
   useAbortableEffect(
     (status) => {
+      document.title =
+        categoryName === 'sale' ? 'For Sale | Rent or Sell' : 'For Rent | Rent or Sell';
       const getListingsData = async () => {
         const [data, error] = await getListingsByCategory(categoryName);
         if (!status.aborted) {
-          if (error) {
-            setError(error);
-          } else {
-            setListings(data);
-          }
-          setLoading(false);
+          setData({ listings: data, error, loading: false });
         }
       };
       getListingsData();
@@ -42,17 +42,10 @@ function Category() {
   useEffect(() => {
     if (!initalRender.current) {
       if (sortBy) {
-        setListings([]);
-        setLoading(true);
-        setError('');
+        setData({ listings: [], error: '', loading: true });
         const filteredListingsData = async () => {
           const [data, error] = await getFilteredListings(categoryName, sortBy);
-          if (error) {
-            setError(error);
-          } else {
-            setListings(data);
-          }
-          setLoading(false);
+          setData({ listings: data, error, loading: false });
         };
         filteredListingsData();
       } else {
@@ -64,6 +57,7 @@ function Category() {
   }, [sortBy]);
 
   const pageTitle = categoryName === 'sale' ? 'For Sale' : 'For Rent';
+  const { loading, listings, error } = data;
 
   return (
     <main className="min-h-screen max-w-7xl px-3 mx-auto">
@@ -92,21 +86,14 @@ function Category() {
             </select>
           </div>
         </div>
-
-        {loading && (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {Array(9)
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {loading &&
+            Array(9)
               .fill()
-              .map((item) => (
-                <ListingItemSkeleton key={uuidv4()} />
-              ))}
-          </div>
-        )}
-        {error && <p>{error}</p>}
-
-        {listings.length > 0 && (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {listings.map(({ docID, data }) => {
+              .map((item) => <ListingItemSkeleton key={uuidv4()} />)}
+          {error && <p className="xl:col-span-3 md:col-span-2">{error}</p>}
+          {listings.length > 0 &&
+            listings.map(({ docID, data }) => {
               return (
                 <ListingItem
                   key={docID}
@@ -116,8 +103,7 @@ function Category() {
                 />
               );
             })}
-          </div>
-        )}
+        </div>
       </section>
     </main>
   );
