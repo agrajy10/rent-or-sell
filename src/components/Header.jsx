@@ -2,12 +2,14 @@ import { Link } from 'react-router-dom';
 
 import Navbar from './Navbar';
 
-import useAuthStatus from '../hooks/useAuthStatus';
+import { useAuthState } from 'react-firebase-hooks/auth';
+
+import { auth } from '../firebase.config';
 
 import { ReactComponent as Logo } from '../assets/svg/logo.svg';
 
 function Header() {
-  const { loggedIn } = useAuthStatus();
+  const [user, loading] = useAuthState(auth);
 
   return (
     <header className="px-3">
@@ -18,7 +20,7 @@ function Header() {
           <Logo className="w-10 h-10 sm:w-7 sm:h-7 text-primary" />
           <span className="hidden sm:block">Rent or Sell</span>
         </Link>
-        <Navbar loggedIn={loggedIn} />
+        {!loading && <Navbar loggedIn={!!user} />}
       </div>
     </header>
   );
