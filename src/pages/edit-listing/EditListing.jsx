@@ -218,9 +218,10 @@ function EditListing() {
                   )}
 
                   <FileInput
+                    maxSize={2097152}
                     accept="image/jpg, image/png, image/jpeg"
                     onDrop={(acceptedFiles) => onDropHanlder(acceptedFiles, setFieldValue)}
-                    dropZoneText="Select images"
+                    dropZoneText="Select images (Max file size: 2MB)"
                     id="images"
                     name="images"
                     label="Upload listing images (.jpg, .png)"

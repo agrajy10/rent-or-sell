@@ -169,10 +169,10 @@ function CreateListing() {
                   )}
                   <div>
                     <FileInput
-                      maxFiles={7}
+                      maxSize={2097152}
                       accept="image/jpg, image/png, image/jpeg"
                       onDrop={(acceptedFiles) => onDropHanlder(acceptedFiles, setFieldValue)}
-                      dropZoneText="Select images (Maximum 7)"
+                      dropZoneText="Select images (Max file size: 2MB)"
                       id="images"
                       name="images"
                       label="Upload listing images (.jpg, .png)"
