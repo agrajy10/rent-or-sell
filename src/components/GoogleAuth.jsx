@@ -22,7 +22,8 @@ function GoogleAuth() {
         await setDoc(doc(db, 'users', user.uid), {
           fullname: user.displayName,
           email: user.email,
-          createdOn: serverTimestamp()
+          createdOn: serverTimestamp(),
+          favorites: []
         });
       }
       navigate('/profile');

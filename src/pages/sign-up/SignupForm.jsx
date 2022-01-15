@@ -33,7 +33,7 @@ function SignupForm() {
         displayName: fullname
       });
       //create a document with user's data
-      const formData = { ...values };
+      const formData = { ...values, favorites: [] };
       delete formData.password;
       formData.createdOn = serverTimestamp();
       await setDoc(doc(db, 'users', user.uid), formData);
