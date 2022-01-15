@@ -103,7 +103,7 @@ function MyListings() {
                 .map((item) => <ListingItemSkeleton key={uuidv4()} />)}
             {error && <p className="xl:col-span-3 md:col-span-2">{error}</p>}
             {filteredListings.length === 0 && !error ? (
-              <p className="xl:col-span-3 md:col-span-2">{error}</p>
+              <p className="xl:col-span-3 md:col-span-2">No listings to show.</p>
             ) : null}
             {filteredListings.length > 0 &&
               filteredListings.map(({ docID, data }) => (
