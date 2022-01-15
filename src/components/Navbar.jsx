@@ -38,12 +38,12 @@ function Navbar({ loggedIn }) {
         loggedIn ? (
           <ul className="xl:flex xl:items-center xl:justify-end xl:gap-6 xl:static xl:py-0 xl:mt-0 absolute top-full right-0 w-64 xl:w-auto z-50 py-4 bg-white shadow-lg  rounded-md border xl:border-none xl:shadow-none border-gray-200 mt-2">
             <li>
-              <Link to="/profile" className="xl:px-0 px-4 nav-link">
+              <Link to="/category/sale" className="xl:px-0 px-4 nav-link">
                 For Sale
               </Link>
             </li>
             <li>
-              <Link to="/profile" className="xl:px-0 px-4 nav-link">
+              <Link to="/category/rent" className="xl:px-0 px-4 nav-link">
                 For Rent
               </Link>
             </li>
