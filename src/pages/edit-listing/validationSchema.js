@@ -17,15 +17,7 @@ const validationSchema = Yup.object({
   bathrooms: Yup.number().min(1, 'Cannot be less than one').required('Required'),
   carspace: Yup.number().min(0, 'Cannot be less than zero').required('Required'),
   listingSize: Yup.number().positive('Invalid value').required('Required'),
-  regularPrice: Yup.number().positive('Enter a valid price').required('Required'),
-  onOffer: Yup.boolean(),
-  discountPrice: Yup.number().when('onOffer', {
-    is: true,
-    then: Yup.number()
-      .lessThan(Yup.ref('regularPrice'), 'Discount must be less than regular price')
-      .positive('Enter a valid price')
-      .required('Required')
-  })
+  regularPrice: Yup.number().positive('Enter a valid price').required('Required')
 });
 
 export default validationSchema;

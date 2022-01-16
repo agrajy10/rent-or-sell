@@ -13,8 +13,6 @@ const initialValues = {
   carspace: 1,
   listingSize: 0,
   regularPrice: 0,
-  discountPrice: 0,
-  onOffer: false,
   images: null
 };
 

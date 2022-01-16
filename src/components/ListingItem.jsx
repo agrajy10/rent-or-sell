@@ -16,11 +16,9 @@ function ListingItem({
   bathrooms,
   bedrooms,
   carspace,
-  discountPrice,
   docID,
   imgUrls,
   listingSize,
-  onOffer,
   regularPrice,
   title,
   type,
@@ -29,19 +27,12 @@ function ListingItem({
   isFavorite
 }) {
   const listingType = type === 'sale' ? 'For Sale' : 'For Rent';
-  const listingPrice = onOffer ? discountPrice : regularPrice;
-  const listingOfferTag = onOffer ? (
-    <span className="listing-type bg-rose-500">On offer</span>
-  ) : (
-    <span className={`listing-type ${type}`}>{listingType}</span>
-  );
-  const listingPriceText = `${formatPrice(listingPrice)} ${type === 'rent' ? ' / month' : ''}`;
-
+  const listingPrice = `${formatPrice(regularPrice)} ${type === 'rent' ? ' / month' : ''}`;
   return (
     <article className="card shadow-md card-bordered border-gray-200 relative">
       <div className="absolute flex items-center top-0 left-0 w-full p-4 gap-2">
-        {listingOfferTag}
-        <span className="listing-type bg-primary ml-auto">{listingPriceText}</span>
+        <span className={`listing-type ${type}`}>{listingType}</span>
+        <span className="listing-type bg-primary ml-auto">{listingPrice}</span>
       </div>
       <figure className="h-72 w-full">
         <img src={imgUrls[0]} alt={title} className="w-full h-full object-cover" />

@@ -5,24 +5,10 @@ import { ReactComponent as BathroomIcon } from '../../assets/svg/bathtub.svg';
 import { ReactComponent as CarIcon } from '../../assets/svg/car.svg';
 import { ReactComponent as RulerIcon } from '../../assets/svg/ruler.svg';
 
-function ListingInfoCard({
-  bathrooms,
-  bedrooms,
-  carspace,
-  discountPrice,
-  listingSize,
-  onOffer,
-  regularPrice,
-  type
-}) {
+function ListingInfoCard({ bathrooms, bedrooms, carspace, listingSize, regularPrice, type }) {
   return (
     <>
-      <ListingPrice
-        type={type}
-        onOffer={onOffer}
-        discountPrice={discountPrice}
-        regularPrice={regularPrice}
-      />
+      <ListingPrice type={type} regularPrice={regularPrice} />
       <ul className="space-y-6">
         <li className="listing-info-list-item">
           <RulerIcon width="50px" height="50px" className="icon" />

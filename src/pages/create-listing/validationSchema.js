@@ -18,14 +18,6 @@ const validationSchema = Yup.object({
   carspace: Yup.number().min(0, 'Cannot be less than zero').required('Required'),
   listingSize: Yup.number().positive('Invalid value').required('Required'),
   regularPrice: Yup.number().positive('Enter a valid price').required('Required'),
-  onOffer: Yup.boolean(),
-  discountPrice: Yup.number().when('onOffer', {
-    is: true,
-    then: Yup.number()
-      .lessThan(Yup.ref('regularPrice'), 'Discount must be less than regular price')
-      .positive('Enter a valid price')
-      .required('Required')
-  }),
   images: Yup.mixed().required('You must upload atleast one image')
 });
 

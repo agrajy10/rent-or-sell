@@ -56,7 +56,7 @@ function ListingDetails() {
     [listingId]
   );
 
-  const { address, description, geolocation, imgUrls, onOffer, postedOn, title } = listing;
+  const { address, description, geolocation, imgUrls, postedOn, title } = listing;
 
   if (loading) {
     return <ListingDetailsSkeleton />;
@@ -79,7 +79,7 @@ function ListingDetails() {
         <article className="min-h-screen max-w-7xl px-3 mx-auto lg:py-24 md:py-20 py-14">
           <section className="lg:grid lg:grid-cols-[1fr_448px] lg:gap-9 lg:items-start">
             <div className="bg-white card card-bordered border-gray-300 max-w-md mb-8 lg:mb-0 -mt-40 md:-mt-48 lg:order-2">
-              <div className={`card-body relative ${onOffer ? 'pt-14' : ''}`}>
+              <div className="card-body relative">
                 <ListingInfoCard {...listing} />
               </div>
             </div>

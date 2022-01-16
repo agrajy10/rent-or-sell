@@ -152,21 +152,7 @@ function CreateListing() {
                       type="number"
                       min="0"
                     />
-                    <div className="inline-block mt-2">
-                      <ToggleInput label="On offer" id="onOffer" name="onOffer" />
-                    </div>
                   </div>
-                  {values.onOffer && (
-                    <div>
-                      <TextInput
-                        label="Discount price (in USD)"
-                        id="discountPrice"
-                        name="discountPrice"
-                        type="number"
-                        min="0"
-                      />
-                    </div>
-                  )}
                   <div>
                     <FileInput
                       maxSize={2097152}
